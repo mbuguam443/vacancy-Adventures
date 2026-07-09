@@ -146,7 +146,7 @@
 .dark-theme .sidebar-dashboard a:hover, .dark-theme .sidebar-dashboard a.active { color: #ca8a04 !important; background: rgba(202,138,4,0.1) !important; }
 .dark-theme .topbar-dashboard { background: #1e293b !important; color: #f1f5f9 !important; box-shadow: 0 2px 10px rgba(0,0,0,0.2) !important; }
 .dark-theme .dashboard-content { background: #0f172a !important; }
-.dark-theme .stat-card { background: #1e293b !important; color: #f1f5f9 !important; }
+.dark-theme .stat-card { background: #334155 !important; color: #f1f5f9 !important; }
 .dark-theme .stat-card .stat-value { color: #ca8a04 !important; }
 .dark-theme .table-admin { background: #1e293b !important; color: #cbd5e1 !important; }
 .dark-theme .table-admin th { color: #f1f5f9 !important; border-color: #334155 !important; }
@@ -156,7 +156,7 @@
 .dark-theme .btn-admin-danger { background: #dc2626 !important; color: #fff !important; }
 
 /* ─── FILTER SIDEBAR ─── */
-.dark-theme .filter_sidebar { background: #1e293b !important; box-shadow: 0 4px 20px rgba(0,0,0,0.2) !important; }
+.dark-theme .filter_sidebar { background: #334155 !important; box-shadow: 0 4px 20px rgba(0,0,0,0.2) !important; }
 .dark-theme .filter_sidebar h4 { color: #f1f5f9 !important; }
 .dark-theme .filter_sidebar .single_form select,
 .dark-theme .filter_sidebar .single_form input,
@@ -199,7 +199,7 @@
 
 /* ─── GALLERY ─── */
 .dark-theme .gallery-page { background: #1e293b !important; }
-.dark-theme .gallery-grid .gallery-card { background: #1e293b !important; box-shadow: 0 4px 16px rgba(0,0,0,0.2) !important; }
+.dark-theme .gallery-grid .gallery-card { background: #334155 !important; box-shadow: 0 4px 16px rgba(0,0,0,0.2) !important; }
 .dark-theme .gallery-grid .gallery-card:hover { box-shadow: 0 12px 32px rgba(0,0,0,0.3) !important; }
 .dark-theme .filter-pills .pill { background: #1e293b !important; color: #cbd5e1 !important; border-color: #334155 !important; }
 .dark-theme .filter-pills .pill:hover { background: #ca8a04 !important; color: #fff !important; border-color: #ca8a04 !important; }
