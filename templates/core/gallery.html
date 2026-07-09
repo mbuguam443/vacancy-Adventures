@@ -91,7 +91,7 @@
             {% endfor %}
             {% if gallery_items.has_next %}
             <a href="?page={{ gallery_items.next_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}" class="page-link">&raquo;</a>
-            {% endfor %}
+            {% endif %}
         </div>
         {% endif %}
     </div>
