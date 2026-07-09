@@ -374,7 +374,7 @@
                     <div class="similar-body">
                         <h5><a href="{% url 'tour_detail' st.slug %}">{{ st.title }}</a></h5>
                         <p style="font-size:13px;color:#64748b;"><i class="lni lni-timer"></i> {{ st.duration_days }} Days / {{ st.duration_nights }} Nights</p>
-                        {% if st.next_tour_date %}<p style="font-size:12px;color:#ca8a04;margin-bottom:0;"><i class="lni lni-calendar"></i> Next: {{ st.next_tour_date|date:'d M Y' }}</p>{% endif %}
+                        {% if st.next_tour_date %}<p style="font-size:12px;color:#ca8a04;margin-bottom:0;"><i class="lni lni-calendar"></i> {{ st.next_tour_date|date:'d M Y' }}</p>{% endif %}
                         <div style="font-size:18px;font-weight:700;color:#ca8a04;">
                             {% if st.discount_price %}
                             <span style="font-size:14px;color:#94a3b8;text-decoration:line-through;font-weight:400;">KSh {{ st.price|floatformat:0 }}</span>

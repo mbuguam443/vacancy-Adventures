@@ -246,7 +246,7 @@
                             <span><i class="lni lni-timer"></i> {{ tour.duration_days }}d / {{ tour.duration_nights }}n</span>
                             <span><i class="lni lni-users"></i> {{ tour.max_guests }} pax</span>
                             {% if tour.next_tour_date %}
-                            <span><i class="lni lni-calendar"></i> Next: {{ tour.next_tour_date|date:'d M Y' }}</span>
+                            <span><i class="lni lni-calendar"></i> {{ tour.next_tour_date|date:'d M Y' }}</span>
                             {% endif %}
                         </div>
                         <div class="card-price">
