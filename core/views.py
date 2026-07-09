@@ -73,7 +73,7 @@ def gallery_view(request):
         items = paginator.page(1)
     except EmptyPage:
         items = paginator.page(paginator.num_pages)
-    categories = Gallery.objects.filter(is_active=True).values_list('category', flat=True).distinct()
+    categories = Gallery.objects.filter(is_active=True).order_by('category').values_list('category', flat=True).distinct()
     return render(request, 'core/gallery.html', {
         'gallery_items': items,
         'categories': categories,
