@@ -271,21 +271,26 @@
                             {% if upcoming_dates %}
                             <form action="{% url 'bookings:book_tour' tour.slug %}" method="POST">
                                 {% csrf_token %}
+                                {% with next_date=upcoming_dates.0 %}
                                 <div class="form-group">
                                     <label>Travel Date</label>
-                                    <select name="tour_date_id" class="form-control" required>
-                                        <option value="">Select departure date</option>
+                                    <div style="padding:8px 12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;font-size:14px;color:#1e293b;">
+                                        <strong>{{ next_date.date|date:'d M Y' }}</strong>
+                                        {% if next_date.price_adjustment %}
+                                        <span style="color:#ca8a04;"> ({% if next_date.price_adjustment > 0 %}+{% endif %}KSh {{ next_date.price_adjustment }})</span>
+                                        {% endif %}
+                                        <br><small style="color:#64748b;">{{ next_date.available_seats }} seat{{ next_date.available_seats|pluralize }} available</small>
+                                    </div>
+                                    <input type="hidden" name="tour_date_id" value="{{ next_date.id }}">
+                                    {% if upcoming_dates|length > 1 %}
+                                    <small style="color:#64748b;display:block;margin-top:4px;">Also available:
                                         {% for d in upcoming_dates %}
-                                        <option value="{{ d.id }}" {% if d.available_seats <= 0 %}disabled{% endif %}>
-                                            {{ d.date|date:'d M Y' }}
-                                            ({{ d.available_seats }} seat{{ d.available_seats|pluralize }})
-                                            {% if d.price_adjustment %}
-                                            {% if d.price_adjustment > 0 %}+{% endif %}KSh {{ d.price_adjustment }}
-                                            {% endif %}
-                                        </option>
+                                        {% if forloop.counter0 > 0 %}{{ d.date|date:'d M Y' }}{% if not forloop.last %}, {% endif %}{% endif %}
                                         {% endfor %}
-                                    </select>
+                                    </small>
+                                    {% endif %}
                                 </div>
+                                {% endwith %}
                                 <div class="form-group">
                                     <label>Adults</label>
                                     <input type="number" name="adults" class="form-control" value="1" min="1" max="20">
