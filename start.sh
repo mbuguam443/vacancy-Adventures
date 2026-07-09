@@ -1,3 +1,3 @@
-#!/bin/bash
+#!/usr/bin/env sh
 python manage.py migrate --noinput
-gunicorn safari_tours.wsgi --log-file -
+exec gunicorn safari_tours.wsgi --log-file -
