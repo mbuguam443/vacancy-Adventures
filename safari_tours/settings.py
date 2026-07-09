@@ -99,7 +99,7 @@ MPESA_SHORTCODE = config('MPESA_SHORTCODE', default='174379')
 MPESA_AUTH_URL = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
 MPESA_STK_URL = 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest'
 MPESA_QUERY_URL = 'https://sandbox.safaricom.co.ke/mpesa/stkpushquery/v1/query'
-MPESA_CALLBACK_URL = config('MPESA_CALLBACK_URL', default='https://d2ab-102-210-247-18.ngrok-free.app/payments/mpesa-callback/')
+MPESA_CALLBACK_URL = config('MPESA_CALLBACK_URL', default='https://vacancy-adventures.onrender.com/payments/mpesa-callback/')
 
 # When True, skips actual M-Pesa API calls and auto-completes payments
 MPESA_DEMO_MODE = config('MPESA_DEMO_MODE', default=False, cast=bool)
