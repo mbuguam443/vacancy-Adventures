@@ -80,8 +80,12 @@
 .dark-theme .form-control:focus { border-color: #ca8a04 !important; box-shadow: 0 0 0 2px rgba(202,138,4,0.15) !important; }
 .dark-theme input::placeholder, .dark-theme textarea::placeholder { color: #475569 !important; }
 .dark-theme .nice-select .current { color: #e2e8f0 !important; }
+.dark-theme .nice-select .list { background: #1e293b !important; box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important; }
 .dark-theme .nice-select .option { color: #cbd5e1 !important; background: #1e293b !important; }
-.dark-theme .nice-select .option:hover, .dark-theme .nice-select .option.focus { background: #334155 !important; }
+.dark-theme .nice-select .option:hover, .dark-theme .nice-select .option.focus, .dark-theme .nice-select .option.selected.focus { background: #334155 !important; }
+.dark-theme .nice-select:after { border-color: #64748b !important; }
+.dark-theme .nice-select.open:after { border-color: #ca8a04 !important; }
+.dark-theme .nice-select.open { border-color: #ca8a04 !important; }
 
 /* ─── BUTTONS ─── */
 .dark-theme .main-btn { background: #ca8a04 !important; color: #fff !important; }
