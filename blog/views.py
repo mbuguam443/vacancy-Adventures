@@ -19,10 +19,14 @@ def blog_list(request):
         posts = paginator.page(paginator.num_pages)
 
     categories = BlogCategory.objects.all()
+    recent_posts = BlogPost.objects.filter(status='published')[:4]
+    featured_posts = BlogPost.objects.filter(status='published', is_featured=True)[:2]
     return render(request, 'blog/blog_list.html', {
         'posts': posts,
         'categories': categories,
         'current_category': category_slug,
+        'recent_posts': recent_posts,
+        'featured_posts': featured_posts,
     })
 
 def blog_detail(request, slug):

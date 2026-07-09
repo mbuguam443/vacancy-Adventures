@@ -8,34 +8,136 @@
 {% block og_image %}{% if post.featured_image %}{{ post.featured_image.url }}{% else %}{% static 'images/hero-area.jpg' %}{% endif %}{% endblock %}
 {% block og_type %}article{% endblock %}
 {% block content %}
-<section class="pt-130 pb-130">
+<style>
+.blog-detail-hero { position:relative; height:420px; background-size:cover; background-position:center; display:flex; align-items:flex-end; border-bottom-left-radius:165px; overflow:hidden; }
+.blog-detail-hero .overlay { position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0.1) 100%); z-index:1; }
+.blog-detail-hero .hero-content { position:relative; z-index:2; padding:40px; max-width:800px; }
+.blog-detail-hero h1 { color:#fff; font-size:32px; font-weight:700; margin-bottom:12px; }
+.blog-detail-hero .hero-meta { color:rgba(255,255,255,0.85); font-size:14px; display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
+.blog-detail-hero .hero-meta span { display:flex; align-items:center; gap:6px; }
+.blog-detail-hero .cat-badge { background:#ca8a04; color:#fff; padding:4px 14px; border-radius:20px; font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; display:inline-block; margin-bottom:10px; }
+
+.blog-article { font-size:16px; line-height:1.9; color:#334155; }
+.blog-article p { margin-bottom:20px; }
+.blog-article h2, .blog-article h3, .blog-article h4 { color:#1e293b; font-weight:700; margin-top:32px; margin-bottom:16px; }
+.blog-article h2 { font-size:24px; }
+.blog-article h3 { font-size:20px; }
+.blog-article blockquote { border-left:4px solid #ca8a04; background:#fefce8; padding:16px 24px; margin:24px 0; border-radius:0 8px 8px 0; font-style:italic; color:#475569; }
+.blog-article ul, .blog-article ol { margin-bottom:20px; padding-left:24px; }
+.blog-article li { margin-bottom:8px; }
+.blog-article img { border-radius:8px; max-width:100%; height:auto; margin:24px 0; }
+
+.share-bar { display:flex; align-items:center; gap:12px; padding:20px 0; border-top:1px solid #e2e8f0; border-bottom:1px solid #e2e8f0; margin:32px 0; }
+.share-bar span { font-weight:600; color:#1e293b; font-size:14px; }
+.share-bar a { display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:50%; color:#fff; font-size:16px; transition:transform 0.2s; }
+.share-bar a:hover { transform:translateY(-2px); text-decoration:none; }
+.share-bar .fb { background:#1877f2; }
+.share-bar .tw { background:#1da1f2; }
+.share-bar .wa { background:#25d366; }
+.share-bar .mail { background:#64748b; }
+
+.sidebar-card { background:#fff; border-radius:12px; box-shadow:0 2px 15px rgba(0,0,0,0.06); padding:24px; margin-bottom:24px; }
+.sidebar-card h4 { font-size:16px; font-weight:700; color:#1e293b; margin-bottom:16px; padding-bottom:10px; border-bottom:2px solid #f1f5f9; }
+.sidebar-card ul { list-style:none; padding:0; margin:0; }
+.sidebar-card ul li { padding:10px 0; border-bottom:1px solid #f8fafc; }
+.sidebar-card ul li:last-child { border-bottom:none; }
+.sidebar-card ul li a { color:#475569; font-size:14px; transition:color 0.2s; display:flex; align-items:center; gap:8px; line-height:1.4; }
+.sidebar-card ul li a:hover { color:#ca8a04; text-decoration:none; }
+.sidebar-card .recent-thumb { width:50px; height:50px; border-radius:8px; object-fit:cover; flex-shrink:0; }
+
+.similar-post-card { background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 2px 15px rgba(0,0,0,0.06); transition:all 0.3s ease; height:100%; }
+.similar-post-card:hover { box-shadow:0 8px 25px rgba(0,0,0,0.1); transform:translateY(-3px); }
+.similar-post-card img { width:100%; height:180px; object-fit:cover; }
+.similar-post-card .sp-body { padding:18px 20px; }
+.similar-post-card h5 { font-size:15px; font-weight:600; line-height:1.4; }
+.similar-post-card h5 a { color:#1e293b; transition:color 0.2s; }
+.similar-post-card h5 a:hover { color:#ca8a04; text-decoration:none; }
+.similar-post-card .sp-meta { font-size:12px; color:#64748b; margin-top:6px; display:flex; align-items:center; gap:6px; }
+</style>
+
+{% if post.featured_image %}
+<section class="blog-detail-hero" style="background-image:url('{{ post.featured_image.url }}');">
+{% else %}
+<section class="blog-detail-hero" style="background-image:url('{% static 'images/hero-area.jpg' %}');">
+{% endif %}
+    <div class="overlay"></div>
+    <div class="hero-content">
+        {% if post.category %}<span class="cat-badge">{{ post.category.name }}</span>{% endif %}
+        <h1>{{ post.title }}</h1>
+        <div class="hero-meta">
+            <span><i class="lni lni-user"></i> {{ post.author|default:'Admin' }}</span>
+            <span><i class="lni lni-calendar"></i> {{ post.created_at|date:'d F Y' }}</span>
+        </div>
+    </div>
+</section>
+
+<section class="pt-60 pb-130">
     <div class="container">
         <div class="row">
             <div class="col-lg-8">
-                <article>
-                    <h2>{{ post.title }}</h2>
-                    <p><small>Posted by {{ post.author|default:'Admin' }} on {{ post.created_at|date:'d F Y' }}</small></p>
-                    {% if post.category %}<p><span class="badge badge-primary">{{ post.category.name }}</span></p>{% endif %}
-                    {% if post.featured_image %}
-                    <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" style="width:100%;height:400px;object-fit:cover;border-radius:8px;" class="mb-30">
-                    {% endif %}
-                    <div class="blog_content">
-                        {{ post.content|linebreaks }}
-                    </div>
+                <article class="blog-article">
+                    {{ post.content|linebreaks }}
                 </article>
+                <div class="share-bar">
+                    <span>Share:</span>
+                    {% with share_url=request.build_absolute_uri %}
+                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ share_url|urlencode }}" target="_blank" class="fb" title="Share on Facebook"><i class="lni lni-facebook"></i></a>
+                    <a href="https://twitter.com/intent/tweet?url={{ share_url|urlencode }}&text={{ post.title|urlencode }}" target="_blank" class="tw" title="Share on Twitter"><i class="lni lni-twitter"></i></a>
+                    <a href="https://wa.me/?text={{ share_url|urlencode }}" target="_blank" class="wa" title="Share on WhatsApp"><i class="lni lni-whatsapp"></i></a>
+                    <a href="mailto:?subject={{ post.title }}&body={{ share_url }}" class="mail" title="Share via Email"><i class="lni lni-envelope"></i></a>
+                    {% endwith %}
+                </div>
+                {% if post.author %}
+                <div style="display:flex;align-items:center;gap:16px;padding:20px;background:#f8fafc;border-radius:12px;margin:24px 0;">
+                    <div style="width:56px;height:56px;border-radius:50%;background:#ca8a04;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;font-weight:700;flex-shrink:0;">
+                        {{ post.author.username|first|upper }}
+                    </div>
+                    <div>
+                        <strong style="color:#1e293b;">{{ post.author|default:'Admin' }}</strong>
+                        <p style="margin:2px 0 0;font-size:13px;color:#64748b;">Vacay Adventure Author</p>
+                    </div>
+                </div>
+                {% endif %}
+                {% if recent_posts %}
+                <h4 style="font-weight:700;color:#1e293b;margin:40px 0 20px;">You Might Also Like</h4>
+                <div class="row">
+                    {% for rp in recent_posts %}
+                    <div class="col-md-4 mb-20">
+                        <div class="similar-post-card">
+                            <a href="{% url 'blog:blog_detail' rp.slug %}">
+                                <img src="{% if rp.featured_image %}{{ rp.featured_image.url }}{% else %}{% static 'images/blog-1.jpg' %}{% endif %}" alt="{{ rp.title }}" loading="lazy">
+                            </a>
+                            <div class="sp-body">
+                                <h5><a href="{% url 'blog:blog_detail' rp.slug %}">{{ rp.title|truncatewords:10 }}</a></h5>
+                                <div class="sp-meta"><i class="lni lni-calendar"></i> {{ rp.created_at|date:'d M Y' }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
             </div>
             <div class="col-lg-4">
-                <div class="blog_sidebar">
+                <div class="sidebar-card">
                     <h4>Categories</h4>
-                    <ul class="mt-15">
+                    <ul>
                         {% for cat in categories %}
-                        <li><a href="{% url 'blog:blog_list' %}?category={{ cat.slug }}">{{ cat.name }}</a></li>
+                        <li><a href="{% url 'blog:blog_list' %}?category={{ cat.slug }}"><i class="lni lni-tag"></i> {{ cat.name }}</a></li>
+                        {% empty %}
+                        <li style="color:#64748b;font-size:14px;">No categories.</li>
                         {% endfor %}
                     </ul>
-                    <h4 class="mt-30">Recent Posts</h4>
-                    <ul class="mt-15">
+                </div>
+                <div class="sidebar-card">
+                    <h4>Recent Posts</h4>
+                    <ul>
                         {% for rp in recent_posts %}
-                        <li><a href="{% url 'blog:blog_detail' rp.slug %}">{{ rp.title }}</a></li>
+                        <li><a href="{% url 'blog:blog_detail' rp.slug %}">
+                            <img src="{% if rp.featured_image %}{{ rp.featured_image.url }}{% else %}{% static 'images/blog-1.jpg' %}{% endif %}" alt="{{ rp.title }}" class="recent-thumb" loading="lazy">
+                            <span>{{ rp.title|truncatewords:10 }}</span>
+                        </a></li>
+                        {% empty %}
+                        <li style="color:#64748b;font-size:14px;">No posts yet.</li>
                         {% endfor %}
                     </ul>
                 </div>
