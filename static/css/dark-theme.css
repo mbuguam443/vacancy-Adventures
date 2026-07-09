@@ -54,11 +54,11 @@
 .dark-theme .blog_sidebar, .dark-theme .single_gallery,
 .dark-theme .card-admin, .dark-theme .stat-card, .dark-theme .table-admin,
 .dark-theme .page-header, .dark-theme .form-admin .form-group label {
-  background: #1e293b !important;
+  background: #334155 !important;
   box-shadow: 0 2px 15px rgba(0,0,0,0.2) !important;
 }
 
-.dark-theme .card-body, .dark-theme .card-header { background: #1e293b !important; color: #f1f5f9 !important; }
+.dark-theme .card-body, .dark-theme .card-header { background: transparent !important; color: #f1f5f9 !important; }
 
 /* ─── META / MUTED TEXT ─── */
 .dark-theme .blog-meta, .dark-theme .blog_meta ul li, .dark-theme .blog_meta ul li a,
@@ -163,6 +163,9 @@
 .dark-theme .filter_sidebar .single_form textarea { background: #0f172a !important; color: #e2e8f0 !important; border-color: #334155 !important; }
 .dark-theme .filter_sidebar .single_form select:focus,
 .dark-theme .filter_sidebar .single_form input:focus { border-color: #ca8a04 !important; background: #0f172a !important; }
+
+/* ─── TOUR CARD MISC ─── */
+.dark-theme .tour-grid-card .card-price { border-top-color: #475569 !important; }
 
 /* ─── BACK TO TOP ─── */
 .dark-theme .back-to-top { background: #ca8a04 !important; color: #fff !important; box-shadow: 0 2px 10px rgba(0,0,0,0.3) !important; }
