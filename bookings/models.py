@@ -13,7 +13,7 @@ class Booking(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bookings')
     tour = models.ForeignKey(TourPackage, on_delete=models.CASCADE, related_name='bookings')
-    travel_date = models.DateField()
+    travel_date = models.DateField(blank=True, null=True)
     adults = models.IntegerField(default=1)
     children = models.IntegerField(default=0)
     special_requests = models.TextField(blank=True)
