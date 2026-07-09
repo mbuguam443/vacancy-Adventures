@@ -3,9 +3,44 @@
 <html class="no-js" lang="en">
 <head>
     <meta charset="utf-8">
-    <title>{% block title %}Vacay Adventure - Tours & Travel Management{% endblock %}</title>
-    <meta name="description" content="">
+    <title>{% block title %}Vacay Adventure - Kenya Tours & Safari Travel{% endblock %}</title>
+    <meta name="description" content="{% block meta_desc %}Discover unforgettable Kenya safari tours with Vacay Adventure. Masai Mara, Amboseli, beach holidays & more. Book your African adventure today.{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}Kenya safari, African tours, Masai Mara, travel agency, Vacay Adventure, tour packages{% endblock %}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{% block canonical_url %}{{ request.build_absolute_uri }}{% endblock %}">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}Vacay Adventure - Kenya Tours & Safari Travel{% endblock %}">
+    <meta property="og:description" content="{% block og_desc %}Discover unforgettable Kenya safari tours with Vacay Adventure. Masai Mara, Amboseli, beach holidays & more.{% endblock %}">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:image" content="{% block og_image %}{% static 'images/hero-area.jpg' %}{% endblock %}">
+    <meta property="og:site_name" content="Vacay Adventure">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block tw_title %}Vacay Adventure - Kenya Tours & Safari Travel{% endblock %}">
+    <meta name="twitter:description" content="{% block tw_desc %}Discover unforgettable Kenya safari tours with Vacay Adventure.{% endblock %}">
+    <meta name="twitter:image" content="{% block tw_image %}{% static 'images/hero-area.jpg' %}{% endblock %}">
+
+    <!-- JSON-LD Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "{% block schema_type %}TravelAgency{% endblock %}",
+        "name": "Vacay Adventure",
+        "url": "{{ request.build_absolute_uri }}",
+        "image": "{% static 'images/logo.svg' %}",
+        "description": "Kenya safari tours and travel agency",
+        "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "KE"
+        }
+    }
+    </script>
+
     <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="image/png">
     <link rel="stylesheet" href="{% static 'css/animate.css' %}">
     <link rel="stylesheet" href="{% static 'css/nice-select.css' %}">

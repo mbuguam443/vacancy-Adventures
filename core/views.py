@@ -2,9 +2,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
+from django.urls import reverse
 from tours.models import TourPackage, Destination
 from blog.models import BlogPost
 from .models import Service, WhyChooseUs, Testimonial, Gallery, FAQ, ContactMessage, NewsletterSubscriber
+
 
 def home_view(request):
     featured_tours = TourPackage.objects.filter(status='published', is_featured=True)[:6]
@@ -25,6 +27,7 @@ def home_view(request):
     }
     return render(request, 'core/home.html', context)
 
+
 def about_view(request):
     services = Service.objects.all()[:4]
     why_choose_us = WhyChooseUs.objects.all()[:4]
@@ -35,6 +38,7 @@ def about_view(request):
         'testimonials': testimonials,
     }
     return render(request, 'core/about.html', context)
+
 
 def contact_view(request):
     if request.method == 'POST':
@@ -53,6 +57,7 @@ def contact_view(request):
         else:
             messages.error(request, 'Please fill in all required fields.')
     return render(request, 'core/contact.html')
+
 
 def gallery_view(request):
     category = request.GET.get('category')
@@ -75,9 +80,11 @@ def gallery_view(request):
         'current_category': category,
     })
 
+
 def faq_view(request):
     faqs = FAQ.objects.filter(is_active=True)
     return render(request, 'core/faq.html', {'faqs': faqs})
+
 
 def search_view(request):
     query = request.GET.get('q', '')
@@ -112,6 +119,7 @@ def search_view(request):
         'selected_duration': duration,
     })
 
+
 def newsletter_subscribe(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -124,3 +132,29 @@ def newsletter_subscribe(request):
         else:
             messages.error(request, 'Please provide a valid email.')
     return redirect(request.META.get('HTTP_REFERER', '/'))
+
+
+def sitemap_view(request):
+    tours = TourPackage.objects.filter(status='published')
+    destinations = Destination.objects.filter(status='published')
+    posts = BlogPost.objects.filter(status='published')
+    base_url = f'{request.scheme}://{request.get_host()}'
+
+    urls = [
+        {'loc': base_url, 'priority': '1.0'},
+        {'loc': base_url + reverse('tour_list'), 'priority': '0.9'},
+        {'loc': base_url + reverse('about'), 'priority': '0.7'},
+        {'loc': base_url + reverse('contact'), 'priority': '0.6'},
+        {'loc': base_url + reverse('gallery'), 'priority': '0.5'},
+        {'loc': base_url + reverse('faq'), 'priority': '0.5'},
+        {'loc': base_url + reverse('blog:blog_list'), 'priority': '0.8'},
+    ]
+
+    for t in tours:
+        urls.append({'loc': base_url + t.get_absolute_url(), 'priority': '0.8'})
+    for d in destinations:
+        urls.append({'loc': base_url + reverse('destination_detail', args=[d.slug]), 'priority': '0.7'})
+    for p in posts:
+        urls.append({'loc': base_url + reverse('blog:blog_detail', args=[p.slug]), 'priority': '0.7'})
+
+    return render(request, 'core/sitemap.xml', {'urls': urls}, content_type='application/xml')

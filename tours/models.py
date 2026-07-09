@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.utils.text import slugify
 
 class Destination(models.Model):
@@ -114,6 +115,9 @@ class TourPackage(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('tour_detail', args=[self.slug])
 
     def average_rating(self):
         reviews = self.reviews.filter(is_active=True)
