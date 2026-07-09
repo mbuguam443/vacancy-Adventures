@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
-from .models import Destination, TourPackage, TourImage
+from django.utils import timezone
+from .models import Destination, TourPackage, TourImage, TourDate
 
 def destination_list(request):
     destinations = Destination.objects.filter(status='published')
@@ -73,6 +74,8 @@ def tour_detail(request, slug):
     excluded = [s.strip() for s in tour.excluded_services.split('\n') if s.strip()] if tour.excluded_services else []
     itinerary = [s.strip() for s in tour.itinerary.split('\n') if s.strip()] if tour.itinerary else []
 
+    tour_dates = tour.tour_dates.filter(is_active=True, available_seats__gt=0, date__gte=timezone.now().date())
+
     context = {
         'tour': tour,
         'main_image': main_image,
@@ -82,6 +85,7 @@ def tour_detail(request, slug):
         'included': included,
         'excluded': excluded,
         'itinerary': itinerary,
+        'tour_dates': tour_dates,
         'avg_rating': tour.average_rating(),
         'review_count': tour.review_count(),
     }

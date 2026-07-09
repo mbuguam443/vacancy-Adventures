@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from tours.models import TourPackage, Destination, Hotel, Vehicle, TourGuide, TourImage
+from tours.models import TourPackage, Destination, Hotel, Vehicle, TourGuide, TourImage, TourDate
 from bookings.models import Booking, Review
 from payments.models import Payment
 from blog.models import BlogPost, BlogCategory
@@ -83,6 +83,18 @@ class TourGuideForm(forms.ModelForm):
             'bio': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'phone': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
+        }
+
+
+class TourDateForm(forms.ModelForm):
+    class Meta:
+        model = TourDate
+        fields = '__all__'
+        widgets = {
+            'tour': forms.Select(attrs={'class': 'form-select'}),
+            'date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'available_seats': forms.NumberInput(attrs={'class': 'form-control'}),
+            'price_adjustment': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
         }
 
 

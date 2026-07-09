@@ -37,6 +37,12 @@ urlpatterns = [
     path('admin/guides/<int:pk>/edit/', views.get_guide_form, name='admin_guide_edit'),
     path('admin/guides/<int:pk>/delete/', views.delete_guide, name='admin_guide_delete'),
 
+    # Tour Dates
+    path('admin/tour-dates/', views.TourDateList.as_view(), name='admin_tourdate_list'),
+    path('admin/tour-dates/create/', views.get_tourdate_form, name='admin_tourdate_create'),
+    path('admin/tour-dates/<int:pk>/edit/', views.get_tourdate_form, name='admin_tourdate_edit'),
+    path('admin/tour-dates/<int:pk>/delete/', views.delete_tourdate, name='admin_tourdate_delete'),
+
     # Bookings
     path('admin/bookings/', views.BookingList.as_view(), name='admin_booking_list'),
     path('admin/bookings/<int:pk>/edit/', views.get_booking_form, name='admin_booking_edit'),

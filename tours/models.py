@@ -129,6 +129,20 @@ class TourPackage(models.Model):
     def review_count(self):
         return self.reviews.filter(is_active=True).count()
 
+class TourDate(models.Model):
+    tour = models.ForeignKey(TourPackage, on_delete=models.CASCADE, related_name='tour_dates')
+    date = models.DateField(help_text='Available departure date')
+    available_seats = models.IntegerField(help_text='Seats available for this date')
+    price_adjustment = models.DecimalField(max_digits=10, decimal_places=2, default=0, help_text='Optional price +/- for this date')
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['date']
+        unique_together = ['tour', 'date']
+
+    def __str__(self):
+        return f'{self.tour.title} - {self.date} ({self.available_seats} seats)'
+
 class TourImage(models.Model):
     tour = models.ForeignKey(TourPackage, on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to='tours/')

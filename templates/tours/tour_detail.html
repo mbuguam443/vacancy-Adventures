@@ -471,7 +471,14 @@
                             {% csrf_token %}
                             <div class="form-group">
                                 <label>Travel Date</label>
-                                <input type="date" name="travel_date" required>
+                                <select name="tour_date_id" required>
+                                    <option value="">Select a departure date</option>
+                                    {% for td in tour_dates %}
+                                    <option value="{{ td.id }}">{{ td.date|date:'d M Y' }} ({{ td.available_seats }} seats{% if td.price_adjustment %}, adj. KSh {{ td.price_adjustment|floatformat:0 }}{% endif %})</option>
+                                    {% empty %}
+                                    <option value="" disabled>No available dates</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label>Adults</label>

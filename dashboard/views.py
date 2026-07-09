@@ -12,10 +12,10 @@ from django.contrib.auth.models import User
 from bookings.models import Booking, Review
 from payments.models import Payment
 from core.models import ContactMessage, NewsletterSubscriber, Service, WhyChooseUs, Testimonial, Gallery, FAQ, SiteSetting
-from tours.models import TourPackage, Destination, Hotel, Vehicle, TourGuide, TourImage
+from tours.models import TourPackage, Destination, Hotel, Vehicle, TourGuide, TourImage, TourDate
 from blog.models import BlogPost, BlogCategory
 from dashboard.forms import (
-    TourPackageForm, DestinationForm, HotelForm, VehicleForm, TourGuideForm,
+    TourPackageForm, DestinationForm, HotelForm, VehicleForm, TourGuideForm, TourDateForm,
     BookingForm, ReviewForm, BlogPostForm, BlogCategoryForm,
     ServiceForm, WhyChooseUsForm, TestimonialForm, GalleryForm, FAQForm,
     SiteSettingForm, CustomerForm,
@@ -381,6 +381,46 @@ def delete_guide(request, pk):
         return redirect('dashboard:admin_guide_list')
     return render(request, 'dashboard/admin/admin_confirm_delete.html', {
         'object': obj, 'list_url': reverse('dashboard:admin_guide_list'),
+    })
+
+
+# ─── TOUR DATES ───
+
+class TourDateList(AdminListView):
+    model = TourDate
+    page_title = 'Tour Dates'
+    model_name = 'Tour Dates'
+    add_url_name = 'dashboard:admin_tourdate_create'
+    edit_url_name = 'dashboard:admin_tourdate_edit'
+    delete_url_name = 'dashboard:admin_tourdate_delete'
+    search_fields = ['tour__title']
+    columns = [Column('Tour', 'tour'), Column('Date', 'date', 'dashboard/admin/cell_date.html'), Column('Seats', 'available_seats'), Column('Adjustment', 'price_adjustment', 'dashboard/admin/cell_price.html'), Column('Active', 'is_active', 'dashboard/admin/cell_boolean.html')]
+
+
+def get_tourdate_form(request, pk=None):
+    instance = get_object_or_404(TourDate, pk=pk) if pk else None
+    if request.method == 'POST':
+        form = TourDateForm(request.POST, instance=instance)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Tour date saved.')
+            return redirect('dashboard:admin_tourdate_list')
+    else:
+        form = TourDateForm(instance=instance)
+    return render(request, 'dashboard/admin/admin_form.html', {
+        'form': form, 'page_title': 'Edit Tour Date' if instance else 'Add Tour Date',
+        'list_url': reverse('dashboard:admin_tourdate_list'),
+    })
+
+
+def delete_tourdate(request, pk):
+    obj = get_object_or_404(TourDate, pk=pk)
+    if request.method == 'POST':
+        obj.delete()
+        messages.success(request, 'Deleted.')
+        return redirect('dashboard:admin_tourdate_list')
+    return render(request, 'dashboard/admin/admin_confirm_delete.html', {
+        'object': obj, 'list_url': reverse('dashboard:admin_tourdate_list'),
     })
 
 

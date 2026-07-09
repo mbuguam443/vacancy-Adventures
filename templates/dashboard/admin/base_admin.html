@@ -179,6 +179,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
       <a href="{% url 'dashboard:admin_hotel_list' %}" class="{% if '/dashboard/admin/hotels/' in request.path %}active{% endif %}"><i class="lni lni-hotel"></i> Hotels</a>
       <a href="{% url 'dashboard:admin_vehicle_list' %}" class="{% if '/dashboard/admin/vehicles/' in request.path %}active{% endif %}"><i class="lni lni-bus"></i> Vehicles</a>
       <a href="{% url 'dashboard:admin_guide_list' %}" class="{% if '/dashboard/admin/guides/' in request.path %}active{% endif %}"><i class="lni lni-users"></i> Tour Guides</a>
+      <a href="{% url 'dashboard:admin_tourdate_list' %}" class="{% if '/dashboard/admin/tour-dates/' in request.path %}active{% endif %}"><i class="lni lni-calendar"></i> Tour Dates</a>
     </div>
     <div class="sidebar-section">
       <div class="section-title">Bookings</div>
