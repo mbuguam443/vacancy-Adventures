@@ -89,6 +89,139 @@
     </div>
 </section>
 
+<style>
+.tour-grid-card {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.tour-grid-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+}
+.tour-grid-card .card-img-wrap {
+    position: relative;
+    overflow: hidden;
+    height: 220px;
+}
+.tour-grid-card .card-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+.tour-grid-card:hover .card-img-wrap img {
+    transform: scale(1.08);
+}
+.tour-grid-card .card-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: #ca8a04;
+    color: #fff;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    z-index: 2;
+}
+.tour-grid-card .card-discount {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: #dc3545;
+    color: #fff;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    z-index: 2;
+}
+.tour-grid-card .card-body {
+    padding: 18px 20px 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.tour-grid-card .card-body .card-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    line-height: 1.3;
+}
+.tour-grid-card .card-body .card-title a {
+    color: #1e293b;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+.tour-grid-card .card-body .card-title a:hover {
+    color: #ca8a04;
+}
+.tour-grid-card .card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    color: #64748b;
+}
+.tour-grid-card .card-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #f1f5f9;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+.tour-grid-card .card-meta span i {
+    font-size: 14px;
+    color: #ca8a04;
+}
+.tour-grid-card .card-price {
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.tour-grid-card .card-price .price-amount {
+    font-size: 22px;
+    font-weight: 700;
+    color: #ca8a04;
+}
+.tour-grid-card .card-price .price-amount small {
+    font-size: 14px;
+    font-weight: 400;
+    color: #64748b;
+}
+.tour-grid-card .card-price .price-original {
+    font-size: 14px;
+    color: #94a3b8;
+    text-decoration: line-through;
+    margin-right: 6px;
+    font-weight: 400;
+}
+.tour-grid-card .card-price .btn-book {
+    background: #ca8a04;
+    color: #fff;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.3s;
+}
+.tour-grid-card .card-price .btn-book:hover {
+    background: #a66e03;
+    color: #fff;
+}
+</style>
 <!-- Featured Tours -->
 <section id="packges" class="destination_area pt-130 pb-130">
     <div class="container">
@@ -102,28 +235,44 @@
         </div>
         <div class="row">
             {% for tour in featured_tours %}
-            <div class="col-lg-4 col-sm-6">
-                <div class="single_service mt-30 text-center wow fadeInUpBig" data-wow-duration="1.3s" data-wow-delay="0.{{ forloop.counter }}s">
-                    <div class="services_icon">
-                        {% with main_img=tour.images.first %}
-                        {% if main_img %}
-                        <img src="{{ main_img.image.url }}" alt="{{ tour.title }}" style="width:100%;height:200px;object-fit:cover;border-radius:8px;">
+            <div class="col-lg-4 col-sm-6 mb-30 wow fadeInUpBig" data-wow-duration="1.3s" data-wow-delay="0.{{ forloop.counter }}s">
+                <div class="tour-grid-card">
+                    <div class="card-img-wrap">
+                        {% if tour.image %}
+                        <img src="{{ tour.image.url }}" alt="{{ tour.title }}">
+                        {% elif tour.images.first %}
+                        <img src="{{ tour.images.first.image.url }}" alt="{{ tour.title }}">
                         {% else %}
-                        <i class="lni lni-map-marker" style="font-size:60px;"></i>
+                        <img src="{% static 'images/hero-area.jpg' %}" alt="{{ tour.title }}">
                         {% endif %}
-                        {% endwith %}
+                        {% if tour.discount_price %}
+                        <div class="card-discount">Sale</div>
+                        {% endif %}
+                        {% if tour.available_seats <= 0 %}
+                        <div class="card-badge" style="background:#dc3545;">Sold Out</div>
+                        {% else %}
+                        <div class="card-badge">{{ tour.get_category_display }}</div>
+                        {% endif %}
                     </div>
-                    <div class="services_content">
-                        <h4 class="title"><a href="{% url 'tour_detail' tour.slug %}" style="color:inherit;">{{ tour.title }}</a></h4>
-                        <p>{{ tour.duration_days }} Days / {{ tour.duration_nights }} Nights</p>
-                        <p><strong>
-                            {% if tour.discount_price %}
-                            <span style="text-decoration:line-through;color:#999;">KSh {{ tour.price }}</span> KSh {{ tour.discount_price }}
-                            {% else %}
-                            KSh {{ tour.price }}
-                            {% endif %}
-                        </strong></p>
-                        <a href="{% url 'tour_detail' tour.slug %}" class="main-btn mt-2">View Details</a>
+                    <div class="card-body">
+                        <h5 class="card-title"><a href="{% url 'tour_detail' tour.slug %}">{{ tour.title }}</a></h5>
+                        <div class="card-meta">
+                            <span><i class="lni lni-map-marker"></i> {{ tour.destination.name|default:'Various' }}</span>
+                            <span><i class="lni lni-timer"></i> {{ tour.duration_days }}d / {{ tour.duration_nights }}n</span>
+                            <span><i class="lni lni-users"></i> {{ tour.max_guests }} pax</span>
+                        </div>
+                        <div class="card-price">
+                            <div>
+                                {% if tour.discount_price %}
+                                <span class="price-original">KSh {{ tour.price|floatformat:0 }}</span>
+                                <span class="price-amount">KSh {{ tour.discount_price|floatformat:0 }}</span>
+                                {% else %}
+                                <span class="price-amount">KSh {{ tour.price|floatformat:0 }}</span>
+                                {% endif %}
+                                <small>/ per person</small>
+                            </div>
+                            <a href="{% url 'tour_detail' tour.slug %}" class="btn-book">Book</a>
+                        </div>
                     </div>
                 </div>
             </div>

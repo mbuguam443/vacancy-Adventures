@@ -9,205 +9,553 @@
 {% block og_type %}product{% endblock %}
 {% block schema_type %}TouristTrip{% endblock %}
 {% block content %}
-<section class="pt-130 pb-130">
+<style>
+.tour-hero {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    overflow: hidden;
+}
+.tour-hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.tour-hero .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 60%, transparent 100%);
+}
+.tour-hero .hero-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 40px;
+    color: #fff;
+}
+.tour-hero .hero-content h1 {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+.tour-hero .hero-content .hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 15px;
+    opacity: 0.9;
+}
+.tour-hero .hero-content .hero-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.tour-hero .hero-content .hero-price-badge {
+    position: absolute;
+    right: 40px;
+    bottom: 40px;
+    background: #ca8a04;
+    padding: 12px 24px;
+    border-radius: 12px;
+    text-align: center;
+}
+.tour-hero .hero-content .hero-price-badge .amount {
+    font-size: 28px;
+    font-weight: 700;
+    display: block;
+}
+.tour-hero .hero-content .hero-price-badge .original {
+    font-size: 14px;
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+.tour-hero .hero-content .hero-price-badge small {
+    font-size: 12px;
+    opacity: 0.8;
+}
+@media (max-width: 768px) {
+    .tour-hero { height: 350px; }
+    .tour-hero .hero-content h1 { font-size: 24px; }
+    .tour-hero .hero-content .hero-price-badge { position: static; margin-top: 12px; display: inline-block; }
+}
+.info-bar {
+    background: #fff;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 16px 0;
+}
+.info-bar .info-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px;
+    border-right: 1px solid #e2e8f0;
+}
+.info-bar .info-item:last-child { border-right: none; }
+.info-bar .info-item i { font-size: 22px; color: #ca8a04; }
+.info-bar .info-item .info-label { font-size: 12px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
+.info-bar .info-item .info-value { font-size: 15px; font-weight: 600; color: #1e293b; }
+@media (max-width: 768px) {
+    .info-bar .info-item { border-right: none; border-bottom: 1px solid #e2e8f0; }
+}
+.tour-tabs {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.tour-tabs .nav-tabs {
+    background: #f8fafc;
+    border-bottom: 2px solid #e2e8f0;
+    padding: 0 8px;
+}
+.tour-tabs .nav-tabs .nav-link {
+    border: none;
+    color: #64748b;
+    font-weight: 500;
+    padding: 16px 24px;
+    margin: 0 2px;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.2s;
+    background: transparent;
+}
+.tour-tabs .nav-tabs .nav-link:hover { color: #ca8a04; }
+.tour-tabs .nav-tabs .nav-link.active {
+    color: #ca8a04;
+    border-bottom-color: #ca8a04;
+    background: transparent;
+}
+.tour-tabs .tab-content { padding: 30px; }
+.tour-tabs .tab-content ul { padding-left: 20px; }
+.tour-tabs .tab-content ul li { margin-bottom: 8px; line-height: 1.6; }
+.tour-tabs .tab-content .included-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
+.tour-tabs .tab-content .included-item i { font-size: 18px; margin-top: 2px; }
+.booking-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+    overflow: hidden;
+    position: sticky;
+    top: 100px;
+}
+.booking-card .card-header {
+    background: #ca8a04;
+    color: #fff;
+    padding: 18px 24px;
+    text-align: center;
+}
+.booking-card .card-header h4 { margin: 0; font-size: 20px; font-weight: 600; }
+.booking-card .card-header .price-display { font-size: 14px; opacity: 0.9; margin-top: 4px; }
+.booking-card .card-body { padding: 24px; }
+.booking-card .card-body .form-group { margin-bottom: 16px; }
+.booking-card .card-body .form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 6px;
+}
+.booking-card .card-body .form-group input,
+.booking-card .card-body .form-group textarea,
+.booking-card .card-body .form-group select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.2s;
+}
+.booking-card .card-body .form-group input:focus,
+.booking-card .card-body .form-group textarea:focus { outline: none; border-color: #ca8a04; }
+.booking-card .card-body .btn-book-now {
+    width: 100%;
+    padding: 14px;
+    background: #ca8a04;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+.booking-card .card-body .btn-book-now:hover { background: #a66e03; }
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+}
+.gallery-grid .gallery-item {
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+}
+.gallery-grid .gallery-item img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+.gallery-grid .gallery-item:hover img { transform: scale(1.08); }
+.gallery-grid .gallery-item .gallery-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 8px 12px;
+    background: linear-gradient(transparent, rgba(0,0,0,0.6));
+    color: #fff;
+    font-size: 13px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+.gallery-grid .gallery-item:hover .gallery-caption { opacity: 1; }
+.review-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 16px;
+    transition: box-shadow 0.2s;
+}
+.review-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+.review-card .review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.review-card .review-header .reviewer-name { font-weight: 600; color: #1e293b; }
+.review-card .review-header .review-date { font-size: 13px; color: #94a3b8; }
+.review-card .stars { color: #f59e0b; font-size: 15px; }
+.review-card .review-comment { color: #475569; line-height: 1.6; margin-top: 8px; }
+.similar-card {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    transition: transform 0.3s, box-shadow 0.3s;
+    height: 100%;
+}
+.similar-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+.similar-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+.similar-card .similar-body { padding: 16px 18px; }
+.similar-card .similar-body h5 { font-size: 16px; font-weight: 600; }
+.similar-card .similar-body h5 a { color: #1e293b; text-decoration: none; }
+.similar-card .similar-body h5 a:hover { color: #ca8a04; }
+.similar-card .similar-body .similar-price { font-size: 18px; font-weight: 700; color: #ca8a04; margin-top: 8px; }
+.similar-card .similar-body .similar-price .original { font-size: 14px; color: #94a3b8; text-decoration: line-through; font-weight: 400; }
+</style>
+
+<section class="tour-hero">
+    {% if main_image %}
+    <img src="{% if main_image.image %}{{ main_image.image.url }}{% else %}{{ main_image.url }}{% endif %}" alt="{{ tour.title }}">
+    {% else %}
+    <img src="{% static 'images/hero-area.jpg' %}" alt="{{ tour.title }}">
+    {% endif %}
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <h1>{{ tour.title }}</h1>
+        <div class="hero-meta">
+            <span><i class="lni lni-map-marker"></i> {{ tour.destination.name|default:'Various' }}</span>
+            <span><i class="lni lni-timer"></i> {{ tour.duration_days }} Days / {{ tour.duration_nights }} Nights</span>
+            <span><i class="lni lni-star"></i> {{ avg_rating|floatformat:1 }} ({{ review_count }} reviews)</span>
+            <span><span class="badge badge-primary">{{ tour.get_category_display }}</span></span>
+            <span><span class="badge badge-secondary">{{ tour.get_difficulty_display }}</span></span>
+        </div>
+        <div class="hero-price-badge">
+            {% if tour.discount_price %}
+            <span class="original">KSh {{ tour.price|floatformat:0 }}</span>
+            <span class="amount">KSh {{ tour.discount_price|floatformat:0 }}</span>
+            {% else %}
+            <span class="amount">KSh {{ tour.price|floatformat:0 }}</span>
+            {% endif %}
+            <small>/ per person</small>
+        </div>
+    </div>
+</section>
+
+<section class="info-bar">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-3 col-6 info-item">
+                <i class="lni lni-timer"></i>
+                <div>
+                    <div class="info-label">Duration</div>
+                    <div class="info-value">{{ tour.duration_days }} Days / {{ tour.duration_nights }} Nights</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 info-item">
+                <i class="lni lni-users"></i>
+                <div>
+                    <div class="info-label">Max Guests</div>
+                    <div class="info-value">{{ tour.max_guests }} persons</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 info-item">
+                <i class="lni lni-flag"></i>
+                <div>
+                    <div class="info-label">Difficulty</div>
+                    <div class="info-value">{{ tour.get_difficulty_display }}</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 info-item">
+                <i class="lni lni-map-marker"></i>
+                <div>
+                    <div class="info-label">Available Seats</div>
+                    <div class="info-value">{{ tour.available_seats }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="pt-50 pb-130" style="background:#f8fafc;">
     <div class="container">
         <div class="row">
             <div class="col-lg-8">
-                <div class="tour_main_image mb-30">
-                    {% if main_image %}
-                    <img src="{% if main_image.image %}{{ main_image.image.url }}{% else %}{{ main_image.url }}{% endif %}" alt="{{ tour.title }}" style="width:100%;height:400px;object-fit:cover;border-radius:8px;">
-                    {% else %}
-                    <img src="{% static 'images/hero-area.jpg' %}" alt="{{ tour.title }}" style="width:100%;height:400px;object-fit:cover;border-radius:8px;">
-                    {% endif %}
-                </div>
-                <div class="tour_meta mb-30">
-                    <p><i class="lni lni-map-marker"></i> {{ tour.destination.name|default:'Various' }}</p>
-                    <p><i class="lni lni-timer"></i> {{ tour.duration_days }} Days / {{ tour.duration_nights }} Nights</p>
-                    <p><i class="lni lni-users"></i> Max {{ tour.max_guests }} guests</p>
-                    <p><i class="lni lni-star"></i> {{ avg_rating }} ({{ review_count }} reviews)</p>
-                    <p><span class="badge badge-primary">{{ tour.get_category_display }}</span> <span class="badge badge-secondary">{{ tour.get_difficulty_display }}</span></p>
-                </div>
-                <div class="tour_content">
-                    <h3>{{ tour.title }}</h3>
-                    <h4 class="mt-20">
-                        {% if tour.discount_price %}
-                        <span style="text-decoration:line-through;color:#999;">KSh {{ tour.price }}</span>
-                        <span style="color:#ff6b6b;">KSh {{ tour.discount_price }}</span>
-                        {% else %}
-                        KSh {{ tour.price }}
+                <div class="tour-tabs">
+                    <ul class="nav nav-tabs" id="tourTabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="overview-tab" data-toggle="tab" href="#overview" role="tab">Overview</a>
+                        </li>
+                        {% if itinerary %}
+                        <li class="nav-item">
+                            <a class="nav-link" id="itinerary-tab" data-toggle="tab" href="#itinerary" role="tab">Itinerary</a>
+                        </li>
                         {% endif %}
-                        <small>/ per person</small>
-                    </h4>
-                    <hr>
-                    <h4>Description</h4>
-                    <p>{{ tour.description|linebreaks }}</p>
-                    <hr>
-                    <h4>Available Seats: {{ tour.available_seats }}</h4>
-                    <hr>
-                    {% if itinerary %}
-                    <h4>Itinerary</h4>
-                    <ul>
-                        {% for day in itinerary %}
-                        <li>{{ day }}</li>
-                        {% endfor %}
+                        {% if included or excluded %}
+                        <li class="nav-item">
+                            <a class="nav-link" id="inclusions-tab" data-toggle="tab" href="#inclusions" role="tab">Inclusions</a>
+                        </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link" id="reviews-tab" data-toggle="tab" href="#reviews" role="tab">Reviews ({{ review_count }})</a>
+                        </li>
                     </ul>
-                    <hr>
-                    {% endif %}
-                    {% if included %}
-                    <h4>Included</h4>
-                    <ul>
-                        {% for item in included %}
-                        <li><i class="lni lni-check-mark-circle" style="color:green;"></i> {{ item }}</li>
-                        {% endfor %}
-                    </ul>
-                    <hr>
-                    {% endif %}
-                    {% if excluded %}
-                    <h4>Excluded</h4>
-                    <ul>
-                        {% for item in excluded %}
-                        <li><i class="lni lni-close" style="color:red;"></i> {{ item }}</li>
-                        {% endfor %}
-                    </ul>
-                    <hr>
-                    {% endif %}
-                    {% if tour.meeting_point %}
-                    <h4>Meeting Point</h4>
-                    <p>{{ tour.meeting_point }}</p>
-                    <hr>
-                    {% endif %}
-                </div>
-                {% if tour_images.count > 1 %}
-                <div class="tour_gallery mt-30">
-                    <h4>Gallery</h4>
-                    <div class="row mt-15">
-                        {% for img in tour_images %}
-                        <div class="col-md-4 col-6 mt-15">
-                            <img src="{{ img.image.url }}" alt="{{ img.caption }}" style="width:100%;height:150px;object-fit:cover;border-radius:4px;">
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-                {% endif %}
-                <div class="tour_reviews mt-30">
-                    <h4>Reviews ({{ review_count }})</h4>
-                    {% for review in reviews %}
-                    <div class="single_review mt-20" style="border:1px solid #eee;padding:15px;border-radius:8px;">
-                        <h5>{{ review.user.get_full_name|default:review.user.username }}</h5>
-                        <div class="text-warning">
-                            {% for i in "12345" %}
-                            {% if forloop.counter <= review.rating %}
-                            <i class="lni lni-star-filled"></i>
-                            {% else %}
-                            <i class="lni lni-star"></i>
+                    <div class="tab-content" id="tourTabsContent">
+                        <div class="tab-pane fade show active" id="overview" role="tabpanel">
+                            <h4 class="mb-15" style="color:#1e293b;">Description</h4>
+                            <p style="color:#475569;line-height:1.8;">{{ tour.description|linebreaks }}</p>
+                            {% if tour.meeting_point %}
+                            <h5 class="mt-30 mb-10" style="color:#1e293b;">Meeting Point</h5>
+                            <p style="color:#475569;"><i class="lni lni-map-marker" style="color:#ca8a04;"></i> {{ tour.meeting_point }}</p>
                             {% endif %}
+                        </div>
+                        {% if itinerary %}
+                        <div class="tab-pane fade" id="itinerary" role="tabpanel">
+                            <h4 class="mb-15" style="color:#1e293b;">Full Itinerary</h4>
+                            <ul>
+                                {% for day in itinerary %}
+                                <li>{{ day }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                        {% if included or excluded %}
+                        <div class="tab-pane fade" id="inclusions" role="tabpanel">
+                            <div class="row">
+                                {% if included %}
+                                <div class="col-md-6">
+                                    <h5 class="mb-15" style="color:#059669;"><i class="lni lni-check-mark-circle"></i> Included</h5>
+                                    {% for item in included %}
+                                    <div class="included-item">
+                                        <i class="lni lni-check-mark-circle" style="color:#059669;"></i>
+                                        <span>{{ item }}</span>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                                {% if excluded %}
+                                <div class="col-md-6">
+                                    <h5 class="mb-15" style="color:#dc2626;"><i class="lni lni-close"></i> Excluded</h5>
+                                    {% for item in excluded %}
+                                    <div class="included-item">
+                                        <i class="lni lni-close" style="color:#dc2626;"></i>
+                                        <span>{{ item }}</span>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        <div class="tab-pane fade" id="reviews" role="tabpanel">
+                            <h4 class="mb-20" style="color:#1e293b;">Guest Reviews</h4>
+                            {% if user.is_authenticated %}
+                            <div class="mb-30 p-20" style="background:#f8fafc;border-radius:10px;border:1px dashed #e2e8f0;">
+                                <h5 class="mb-15" style="color:#1e293b;">Write a Review</h5>
+                                <form action="{% url 'bookings:add_review' tour.slug %}" method="POST">
+                                    {% csrf_token %}
+                                    <div class="form-group mb-15">
+                                        <select name="rating" class="form-control" required style="padding:10px 14px;border:1px solid #e2e8f0;border-radius:8px;width:100%;">
+                                            <option value="">Select Rating</option>
+                                            <option value="5">5 - Excellent</option>
+                                            <option value="4">4 - Very Good</option>
+                                            <option value="3">3 - Good</option>
+                                            <option value="2">2 - Fair</option>
+                                            <option value="1">1 - Poor</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group mb-15">
+                                        <textarea name="comment" placeholder="Share your experience..." required style="width:100%;padding:10px 14px;border:1px solid #e2e8f0;border-radius:8px;min-height:100px;"></textarea>
+                                    </div>
+                                    <button type="submit" class="main-btn">Submit Review</button>
+                                </form>
+                            </div>
+                            {% endif %}
+                            {% for review in reviews %}
+                            <div class="review-card">
+                                <div class="review-header">
+                                    <div>
+                                        <span class="reviewer-name">{{ review.user.get_full_name|default:review.user.username }}</span>
+                                        <div class="stars mt-5">
+                                            {% for i in "12345" %}
+                                            {% if forloop.counter <= review.rating %}
+                                            <i class="lni lni-star-filled"></i>
+                                            {% else %}
+                                            <i class="lni lni-star"></i>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <span class="review-date">{{ review.created_at|date:'d M Y' }}</span>
+                                </div>
+                                <p class="review-comment">{{ review.comment }}</p>
+                            </div>
+                            {% empty %}
+                            <p style="color:#94a3b8;padding:30px 0;text-align:center;">No reviews yet. Be the first to review!</p>
                             {% endfor %}
                         </div>
-                        <p>{{ review.comment }}</p>
-                        <small>{{ review.created_at|date:'d M Y' }}</small>
                     </div>
-                    {% empty %}
-                    <p>No reviews yet.</p>
-                    {% endfor %}
                 </div>
-                {% if user.is_authenticated %}
-                <div class="add_review mt-30">
-                    <h4>Write a Review</h4>
-                    <form action="{% url 'bookings:add_review' tour.slug %}" method="POST">
-                        {% csrf_token %}
-                        <div class="single_form mt-15">
-                            <select name="rating" required>
-                                <option value="">Select Rating</option>
-                                <option value="5">5 - Excellent</option>
-                                <option value="4">4 - Very Good</option>
-                                <option value="3">3 - Good</option>
-                                <option value="2">2 - Fair</option>
-                                <option value="1">1 - Poor</option>
-                            </select>
+                {% if tour_images.count > 1 %}
+                <div class="mt-30">
+                    <h4 class="mb-20" style="color:#1e293b;">Photo Gallery</h4>
+                    <div class="gallery-grid">
+                        {% for img in tour_images %}
+                        <div class="gallery-item">
+                            <img src="{{ img.image.url }}" alt="{{ img.caption|default:'Tour image' }}">
+                            {% if img.caption %}
+                            <div class="gallery-caption">{{ img.caption }}</div>
+                            {% endif %}
                         </div>
-                        <div class="single_form mt-15">
-                            <textarea name="comment" placeholder="Your review" required></textarea>
-                        </div>
-                        <button type="submit" class="main-btn mt-15">Submit Review</button>
-                    </form>
+                        {% endfor %}
+                    </div>
                 </div>
                 {% endif %}
             </div>
             <div class="col-lg-4">
-                <div class="booking_sidebar" style="position:sticky;top:100px;">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="card-title">Book This Tour</h4>
-                            {% if tour.available_seats > 0 %}
-                            <form action="{% url 'bookings:book_tour' tour.slug %}" method="POST">
-                                {% csrf_token %}
-                                <div class="single_form mt-15">
-                                    <label>Travel Date</label>
-                                    <input type="date" name="travel_date" required>
-                                </div>
-                                <div class="single_form mt-15">
-                                    <label>Adults</label>
-                                    <input type="number" name="adults" value="1" min="1" max="{{ tour.available_seats }}">
-                                </div>
-                                <div class="single_form mt-15">
-                                    <label>Children</label>
-                                    <input type="number" name="children" value="0" min="0">
-                                </div>
-                                <div class="single_form mt-15">
-                                    <textarea name="special_requests" placeholder="Special requests (optional)"></textarea>
-                                </div>
-                                {% if user.is_authenticated %}
-                                <button type="submit" class="main-btn mt-15" style="width:100%;">Book Now</button>
-                                {% else %}
-                                <p class="mt-15"><a href="{% url 'accounts:login' %}?next={% url 'tour_detail' tour.slug %}">Login</a> to book this tour.</p>
-                                {% endif %}
-                            </form>
+                <div class="booking-card">
+                    <div class="card-header">
+                        <h4>Book This Tour</h4>
+                        <div class="price-display">
+                            {% if tour.discount_price %}
+                            KSh {{ tour.discount_price|floatformat:0 }} / person
                             {% else %}
-                            <p class="text-danger">Sorry, this tour is fully booked.</p>
+                            KSh {{ tour.price|floatformat:0 }} / person
                             {% endif %}
                         </div>
                     </div>
-                    {% if tour.hotel %}
-                    <div class="card mt-30">
-                        <div class="card-body">
-                            <h5>Accommodation</h5>
-                            <p><strong>{{ tour.hotel.name }}</strong></p>
-                            {% if tour.hotel.image %}<img src="{{ tour.hotel.image.url }}" alt="{{ tour.hotel.name }}" style="width:100%;height:120px;object-fit:cover;border-radius:4px;">{% endif %}
+                    <div class="card-body">
+                        {% if tour.available_seats > 0 %}
+                        <form action="{% url 'bookings:book_tour' tour.slug %}" method="POST">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label>Travel Date</label>
+                                <input type="date" name="travel_date" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Adults</label>
+                                <input type="number" name="adults" value="1" min="1" max="{{ tour.available_seats }}">
+                            </div>
+                            <div class="form-group">
+                                <label>Children</label>
+                                <input type="number" name="children" value="0" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label>Special Requests</label>
+                                <textarea name="special_requests" placeholder="Any special requirements?" rows="3"></textarea>
+                            </div>
+                            {% if user.is_authenticated %}
+                            <button type="submit" class="btn-book-now">Book Now</button>
+                            {% else %}
+                            <a href="{% url 'accounts:login' %}?next={% url 'tour_detail' tour.slug %}" class="btn-book-now" style="display:block;text-align:center;text-decoration:none;">Login to Book</a>
+                            {% endif %}
+                        </form>
+                        {% else %}
+                        <div style="text-align:center;padding:20px 0;">
+                            <i class="lni lni-close" style="font-size:48px;color:#dc3545;"></i>
+                            <p style="color:#dc3545;font-weight:600;margin-top:10px;">Fully Booked</p>
                         </div>
+                        {% endif %}
                     </div>
-                    {% endif %}
-                    {% if tour.guide %}
-                    <div class="card mt-30">
-                        <div class="card-body">
-                            <h5>Tour Guide</h5>
-                            <p><strong>{{ tour.guide.name }}</strong></p>
-                            {% if tour.guide.image %}<img src="{{ tour.guide.image.url }}" alt="{{ tour.guide.name }}" style="width:80px;height:80px;object-fit:cover;border-radius:50%;">{% endif %}
-                            <p>{{ tour.guide.bio|truncatewords:20 }}</p>
-                        </div>
-                    </div>
-                    {% endif %}
-                    {% if tour.vehicle %}
-                    <div class="card mt-30">
-                        <div class="card-body">
-                            <h5>Vehicle</h5>
-                            <p><strong>{{ tour.vehicle.name }}</strong> ({{ tour.vehicle.capacity }} seats)</p>
-                        </div>
-                    </div>
-                    {% endif %}
                 </div>
+                {% if tour.hotel %}
+                <div class="booking-card mt-30">
+                    <div class="card-header" style="background:#1e293b;">
+                        <h4 style="font-size:16px;">Accommodation</h4>
+                    </div>
+                    <div class="card-body">
+                        <p style="font-weight:600;color:#1e293b;">{{ tour.hotel.name }}</p>
+                        {% if tour.hotel.image %}<img src="{{ tour.hotel.image.url }}" alt="{{ tour.hotel.name }}" style="width:100%;height:140px;object-fit:cover;border-radius:8px;margin-top:8px;">{% endif %}
+                    </div>
+                </div>
+                {% endif %}
+                {% if tour.guide %}
+                <div class="booking-card mt-30">
+                    <div class="card-header" style="background:#1e293b;">
+                        <h4 style="font-size:16px;">Tour Guide</h4>
+                    </div>
+                    <div class="card-body" style="text-align:center;">
+                        {% if tour.guide.image %}<img src="{{ tour.guide.image.url }}" alt="{{ tour.guide.name }}" style="width:80px;height:80px;object-fit:cover;border-radius:50%;margin-bottom:10px;">{% endif %}
+                        <p style="font-weight:600;color:#1e293b;margin-bottom:4px;">{{ tour.guide.name }}</p>
+                        <p style="font-size:13px;color:#64748b;">{{ tour.guide.bio|truncatewords:20 }}</p>
+                    </div>
+                </div>
+                {% endif %}
+                {% if tour.vehicle %}
+                <div class="booking-card mt-30">
+                    <div class="card-header" style="background:#1e293b;">
+                        <h4 style="font-size:16px;">Vehicle</h4>
+                    </div>
+                    <div class="card-body">
+                        <p style="font-weight:600;color:#1e293b;">{{ tour.vehicle.name }} <span style="font-weight:400;color:#64748b;">({{ tour.vehicle.capacity }} seats)</span></p>
+                    </div>
+                </div>
+                {% endif %}
             </div>
         </div>
         {% if similar_tours %}
-        <div class="row mt-30">
+        <div class="row mt-50">
             <div class="col-12">
-                <h4>Similar Tours</h4>
+                <h4 class="mb-25" style="color:#1e293b;font-weight:600;">Similar Tours You Might Like</h4>
             </div>
             {% for st in similar_tours %}
-            <div class="col-lg-4 col-sm-6 mt-15">
-                <div class="single_service text-center">
-                    <div class="services_content">
-                        <h4><a href="{% url 'tour_detail' st.slug %}">{{ st.title }}</a></h4>
-                        <p>KSh {{ st.discount_price|default:st.price }}</p>
+            <div class="col-lg-4 col-sm-6 mb-30">
+                <div class="similar-card">
+                    <a href="{% url 'tour_detail' st.slug %}">
+                        <img src="{% if st.image %}{{ st.image.url }}{% elif st.images.first %}{{ st.images.first.image.url }}{% else %}{% static 'images/hero-area.jpg' %}{% endif %}" alt="{{ st.title }}">
+                    </a>
+                    <div class="similar-body">
+                        <h5><a href="{% url 'tour_detail' st.slug %}">{{ st.title }}</a></h5>
+                        <p style="font-size:13px;color:#64748b;"><i class="lni lni-timer"></i> {{ st.duration_days }} Days / {{ st.duration_nights }} Nights</p>
+                        <div class="similar-price">
+                            {% if st.discount_price %}
+                            <span class="original">KSh {{ st.price|floatformat:0 }}</span>
+                            KSh {{ st.discount_price|floatformat:0 }}
+                            {% else %}
+                            KSh {{ st.price|floatformat:0 }}
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             </div>
