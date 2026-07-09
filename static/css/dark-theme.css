@@ -34,7 +34,12 @@
 .dark-theme .sub-menu li a { color: #cbd5e1 !important; }
 .dark-theme .sub-menu li a.active, .dark-theme .sub-menu li a:hover { color: #ca8a04 !important; }
 .dark-theme .navbar-collapse { background: #0f172a !important; }
-.dark-theme .navbar-brand { color: #f1f5f9 !important; }
+.dark-theme .navbar-brand, .dark-theme .navbar-brand:hover { color: #f1f5f9 !important; }
+.dark-theme .nav-link { color: #e2e8f0 !important; }
+.dark-theme .dropdown-menu { background: #1e293b !important; border-color: #334155 !important; box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important; }
+.dark-theme .dropdown-item { color: #e2e8f0 !important; }
+.dark-theme .dropdown-item:hover, .dark-theme .dropdown-item:focus { background: #334155 !important; color: #ca8a04 !important; }
+.dark-theme .dropdown-divider { border-color: #334155 !important; }
 
 /* ─── SECTIONS ─── */
 .dark-theme .destination_area { background: #1e293b !important; }
