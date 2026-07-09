@@ -2,7 +2,11 @@
 {% load static %}
 {% block title %}Login - Vacay Adventure{% endblock %}
 {% block hero %}
-<section class="header_area">
+<style>
+.auth-hero .single_slider { height:280px !important; }
+@media (max-width:767px) { .auth-hero .single_slider { height:200px !important; } }
+</style>
+<section class="header_area auth-hero">
     <div id="home" class="header_slider">
         <div class="single_slider bg_cover d-flex align-items-center" style="background-image: url({% static 'images/hero-area.jpg' %})">
             <div class="container">
@@ -19,7 +23,7 @@
 </section>
 {% endblock %}
 {% block content %}
-<section class="pt-120 pb-130">
+<section class="pt-50 pb-80">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-5">
