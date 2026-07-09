@@ -37,43 +37,61 @@
 </section>
 {% endblock %}
 {% block content %}
-<section class="gallery_area pt-120 pb-130">
+<style>
+.gallery-page { background: #f8fafc; }
+.filter-pills { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 40px; }
+.filter-pills .pill { display: inline-block; padding: 8px 22px; border-radius: 25px; font-size: 14px; font-weight: 500; text-decoration: none; transition: all 0.3s; background: #fff; color: #64748b; border: 1px solid #e2e8f0; }
+.filter-pills .pill:hover { background: #ca8a04; color: #fff; border-color: #ca8a04; }
+.filter-pills .pill.active { background: #ca8a04; color: #fff; border-color: #ca8a04; }
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+.gallery-grid .gallery-card { border-radius: 14px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.07); transition: transform 0.3s, box-shadow 0.3s; background: #fff; position: relative; cursor: pointer; }
+.gallery-grid .gallery-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.13); }
+.gallery-grid .gallery-card .card-img { width: 100%; height: 260px; object-fit: cover; transition: transform 0.5s; display: block; }
+.gallery-grid .gallery-card:hover .card-img { transform: scale(1.06); }
+.gallery-grid .gallery-card .card-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 50px 20px 18px; background: linear-gradient(transparent, rgba(0,0,0,0.65)); opacity: 0; transition: opacity 0.3s; }
+.gallery-grid .gallery-card:hover .card-overlay { opacity: 1; }
+.gallery-grid .gallery-card .card-overlay .caption { color: #fff; font-size: 15px; font-weight: 500; }
+.gallery-grid .gallery-card .card-overlay .category-tag { display: inline-block; background: #ca8a04; color: #fff; padding: 2px 12px; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+.pagination-wrap { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 50px; }
+.pagination-wrap .page-link { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 10px; border: 1px solid #e2e8f0; color: #1e293b; font-weight: 500; text-decoration: none; transition: all 0.2s; }
+.pagination-wrap .page-link:hover { background: #ca8a04; color: #fff; border-color: #ca8a04; }
+.pagination-wrap .page-link.active { background: #ca8a04; color: #fff; border-color: #ca8a04; }
+@media (max-width: 768px) { .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; } .gallery-grid .gallery-card .card-img { height: 180px; } }
+</style>
+<section class="gallery-page pt-120 pb-130">
     <div class="container">
-        <div class="row">
-            <div class="col-12 text-center mb-30">
-                <a href="?{% if current_category %}category={% endif %}" class="main-btn {% if not current_category %}active{% endif %}" style="margin:5px;">All</a>
-                {% for cat in categories %}
-                <a href="?category={{ cat }}" class="main-btn {% if current_category == cat %}active{% endif %}" style="margin:5px;">{{ cat|title }}</a>
-                {% endfor %}
-            </div>
+        <div class="filter-pills">
+            <a href="{% url 'gallery' %}" class="pill {% if not current_category %}active{% endif %}">All</a>
+            {% for cat in categories %}
+            <a href="?category={{ cat }}" class="pill {% if current_category == cat %}active{% endif %}">{{ cat|title }}</a>
+            {% endfor %}
         </div>
-        <div class="row">
+        <div class="gallery-grid">
             {% for item in gallery_items %}
-            <div class="col-lg-4 col-sm-6">
-                <div class="single_service mt-30 text-center wow fadeInUpBig" data-wow-duration="1.3s" data-wow-delay="0.{{ forloop.counter }}s">
-                    <div class="services_icon">
-                        <img src="{{ item.image.url }}" alt="{{ item.caption }}" style="width:100%;height:250px;object-fit:cover;border-radius:8px;">
-                    </div>
-                    <div class="services_content">
-                        <p>{{ item.caption }}</p>
-                    </div>
+            <div class="gallery-card wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.{{ forloop.counter }}s">
+                <img src="{{ item.image.url }}" alt="{{ item.caption }}" class="card-img" loading="lazy">
+                <div class="card-overlay">
+                    <div class="category-tag">{{ item.get_category_display }}</div>
+                    <div class="caption">{{ item.caption }}</div>
                 </div>
             </div>
             {% empty %}
-            <div class="col-12 text-center"><p>No images found.</p></div>
+            <div class="col-12 text-center" style="grid-column:1/-1;"><p style="color:#94a3b8;padding:60px 0;">No images found.</p></div>
             {% endfor %}
         </div>
         {% if gallery_items.has_other_pages %}
-        <div class="row mt-30">
-            <div class="col-12 text-center">
-                {% if gallery_items.has_previous %}
-                <a href="?page={{ gallery_items.previous_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}" class="main-btn">Previous</a>
-                {% endif %}
-                <span>Page {{ gallery_items.number }} of {{ gallery_items.paginator.num_pages }}</span>
-                {% if gallery_items.has_next %}
-                <a href="?page={{ gallery_items.next_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}" class="main-btn">Next</a>
-                {% endif %}
-            </div>
+        <div class="pagination-wrap">
+            {% if gallery_items.has_previous %}
+            <a href="?page={{ gallery_items.previous_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}" class="page-link">&laquo;</a>
+            {% endif %}
+            {% for i in gallery_items.paginator.page_range %}
+            {% if i >= gallery_items.number|add:'-2' and i <= gallery_items.number|add:'2' %}
+            <a href="?page={{ i }}{% if current_category %}&category={{ current_category }}{% endif %}" class="page-link {% if i == gallery_items.number %}active{% endif %}">{{ i }}</a>
+            {% endif %}
+            {% endfor %}
+            {% if gallery_items.has_next %}
+            <a href="?page={{ gallery_items.next_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}" class="page-link">&raquo;</a>
+            {% endfor %}
         </div>
         {% endif %}
     </div>
