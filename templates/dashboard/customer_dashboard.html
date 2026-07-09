@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Dashboard - Vacay Adventure{% endblock %}
+{% block content %}
+<section class="pt-130 pb-130">
+    <div class="container">
+        <h3 class="mb-30">Welcome, {{ user.get_full_name|default:user.username }}!</h3>
+        <div class="row">
+            <div class="col-lg-3 col-md-6">
+                <div class="card text-center mb-30">
+                    <div class="card-body">
+                        <h2>{{ booking_count }}</h2>
+                        <p>Total Bookings</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="card text-center mb-30">
+                    <div class="card-body">
+                        <h2>{{ completed_bookings }}</h2>
+                        <p>Completed</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="card text-center mb-30">
+                    <div class="card-body">
+                        <h2>{{ pending_bookings }}</h2>
+                        <p>Pending</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="card text-center mb-30">
+                    <div class="card-body">
+                        <h2>KSh {{ total_spent }}</h2>
+                        <p>Total Spent</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <h4>Recent Bookings</h4>
+                {% if bookings %}
+                <div class="table-responsive mt-15">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Tour</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Total</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for booking in bookings %}
+                            <tr>
+                                <td>{{ booking.id }}</td>
+                                <td>{{ booking.tour.title }}</td>
+                                <td>{{ booking.travel_date }}</td>
+                                <td><span class="badge badge-{% if booking.status == 'approved' %}success{% elif booking.status == 'pending' %}warning{% else %}danger{% endif %}">{{ booking.get_status_display }}</span></td>
+                                <td>KSh {{ booking.total_price }}</td>
+                                <td><a href="{% url 'bookings:booking_detail' booking.id %}">View</a></td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="6">No bookings yet.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p>No bookings yet. <a href="{% url 'tour_list' %}">Book a tour now!</a></p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

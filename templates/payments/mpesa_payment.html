@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}M-Pesa Payment{% endblock %}
+{% block content %}
+<section class="page-banner pt-200 pb-100" style="background-image: url('{% static 'img/page-banner.jpg' %}');">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb-text">
+                    <h1>M-Pesa Payment</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{% url 'bookings:user_bookings' %}">My Bookings</a></li>
+                            <li class="breadcrumb-item active">Payment</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="payment-section pt-70 pb-120">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title mb-30">Complete Your Payment</h3>
+
+                        <div class="booking-summary mb-30 p-3 bg-light rounded">
+                            <h5>{{ booking.tour.title }}</h5>
+                            <p class="mb-1">Travel Date: {{ booking.travel_date }}</p>
+                            <p class="mb-1">Guests: {{ booking.adults }} Adult(s), {{ booking.children }} Child(ren)</p>
+                            <p class="mb-0"><strong>Amount: KES {{ payment.amount|floatformat:0 }}</strong></p>
+                        </div>
+
+                        <p class="mb-20">Enter your M-Pesa phone number to receive the STK Push payment prompt:</p>
+
+                        <form id="mpesaForm" method="POST" action="{% url 'payments:initiate_stk_push' booking.id %}">
+                            {% csrf_token %}
+                            <div class="single_form mb-20">
+                                <label>M-Pesa Phone Number</label>
+                                <input type="tel" name="phone" class="form-control form-control-lg"
+                                       placeholder="e.g. 0712345678" required
+                                       value="{% if payment.phone_number %}{{ payment.phone_number }}{% endif %}">
+                                <small class="text-muted">Enter the Safaricom number where you'll receive the prompt.</small>
+                            </div>
+                            <button type="submit" id="payBtn" class="main-btn" style="width:100%;">
+                                Pay KES {{ payment.amount|floatformat:0 }}
+                            </button>
+                        </form>
+
+                        <div id="paymentStatus" class="mt-30" style="display:none;">
+                            <div class="alert" id="statusMessage"></div>
+                        </div>
+
+                        <div id="loadingOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; text-align:center; padding-top:20%;">
+                            <div style="background:#fff; display:inline-block; padding:40px 60px; border-radius:12px;">
+                                <div class="spinner-border text-success mb-3" role="status" style="width:3rem;height:3rem;">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                                <h5 id="loadingText">Processing payment...</h5>
+                                <p class="text-muted mb-0">Please wait</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+$(function() {
+    $('#mpesaForm').on('submit', function(e) {
+        e.preventDefault();
+        var $btn = $('#payBtn');
+        var $status = $('#paymentStatus');
+        var $msg = $('#statusMessage');
+
+        $btn.prop('disabled', true).text('Processing...');
+        $status.hide();
+        $('#loadingOverlay').show();
+
+        $.ajax({
+            url: '{% url "payments:initiate_stk_push" booking.id %}',
+            method: 'POST',
+            data: $(this).serialize(),
+            success: function(resp) {
+                if (resp.demo) {
+                    $('#loadingText').text('Payment completed! Redirecting...');
+                    setTimeout(function() { window.location.href = resp.redirect; }, 1500);
+                } else {
+                    $('#loadingText').text('STK Push sent! Check your phone and enter PIN.');
+                    $('#loadingOverlay .text-muted').text('Redirecting to booking page...');
+                    setTimeout(function() { window.location.href = '{% url "bookings:booking_detail" booking.id %}'; }, 3000);
+                }
+            },
+            error: function(xhr) {
+                $('#loadingOverlay').hide();
+                var err = xhr.responseJSON ? (xhr.responseJSON.error || xhr.responseJSON.message) : 'Payment failed. Try again.';
+                $msg.removeClass('alert-success').addClass('alert-danger').text(err);
+                $status.show();
+                $btn.prop('disabled', false).text('Pay KES {{ payment.amount|floatformat:0 }}');
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

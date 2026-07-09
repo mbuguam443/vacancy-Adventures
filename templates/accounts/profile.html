@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}My Profile - Vacay Adventure{% endblock %}
+{% block content %}
+<section class="pt-130 pb-130">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title mb-30">My Profile</h4>
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="single_form">
+                                        <label>Username</label>
+                                        <input type="text" class="form-control" value="{{ user.username }}" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="single_form">
+                                        <label>Email</label>
+                                        <input type="email" name="email" class="form-control" value="{{ form.email.value|default:user.email }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="single_form mt-15">
+                                        <label>First Name</label>
+                                        <input type="text" name="first_name" class="form-control" value="{{ form.first_name.value|default:user.first_name }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="single_form mt-15">
+                                        <label>Last Name</label>
+                                        <input type="text" name="last_name" class="form-control" value="{{ form.last_name.value|default:user.last_name }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="single_form mt-15">
+                                        <label>Phone</label>
+                                        <input type="text" name="phone" class="form-control" value="{{ form.phone.value|default:'' }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="single_form mt-15">
+                                        <label>City</label>
+                                        <input type="text" name="city" class="form-control" value="{{ form.city.value|default:'' }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="single_form mt-15">
+                                        <label>Country</label>
+                                        <input type="text" name="country" class="form-control" value="{{ form.country.value|default:'' }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="single_form mt-15">
+                                        <label>Profile Image</label>
+                                        <input type="file" name="image" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="single_form mt-15">
+                                        <label>Address</label>
+                                        <textarea name="address" class="form-control">{{ form.address.value|default:'' }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="main-btn mt-30">Update Profile</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

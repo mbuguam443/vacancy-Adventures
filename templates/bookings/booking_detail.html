@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Booking #{{ booking.id }} - Vacay Adventure{% endblock %}
+{% block content %}
+
+{% if booking.payment.status == 'pending' %}
+<div id="paymentPendingAlert" class="alert alert-warning text-center mb-0" style="border-radius:0;">
+    ⏳ Payment pending — waiting for M-Pesa confirmation.
+    <a href="{% url 'payments:mpesa_payment' booking.id %}" class="alert-link">Retry payment</a>
+</div>
+{% endif %}
+<section class="pt-130 pb-130">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">Booking #{{ booking.id }}</h3>
+                        <hr>
+                        <p><strong>Tour:</strong> <a href="{% url 'tour_detail' booking.tour.slug %}">{{ booking.tour.title }}</a></p>
+                        <p><strong>Travel Date:</strong> {{ booking.travel_date }}</p>
+                        <p><strong>Adults:</strong> {{ booking.adults }}</p>
+                        <p><strong>Children:</strong> {{ booking.children }}</p>
+                        <p><strong>Total Guests:</strong> {{ booking.total_guests }}</p>
+                        <p><strong>Total Price:</strong> KES {{ booking.total_price|floatformat:0 }}</p>
+                        <p><strong>Status:</strong> <span class="badge badge-{% if booking.status == 'approved' %}success{% elif booking.status == 'pending' %}warning{% elif booking.status == 'cancelled' %}danger{% else %}info{% endif %}">{{ booking.get_status_display }}</span></p>
+                        {% if booking.special_requests %}<p><strong>Special Requests:</strong> {{ booking.special_requests }}</p>{% endif %}
+                        <p><strong>Booked On:</strong> {{ booking.booking_date|date:'d M Y H:i' }}</p>
+
+                        {% if booking.payment %}
+                        <hr>
+                        <h4>Payment Details</h4>
+                        <p><strong>Reference:</strong> {{ booking.payment.reference_number }}</p>
+                        <p><strong>Amount:</strong> KES {{ booking.payment.amount|floatformat:0 }}</p>
+                        <p><strong>Method:</strong> {{ booking.payment.get_method_display }}</p>
+                        <p><strong>Payment Status:</strong>
+                            <span class="badge badge-{% if booking.payment.status == 'completed' %}success{% elif booking.payment.status == 'failed' %}danger{% else %}warning{% endif %}">
+                                {{ booking.payment.get_status_display }}
+                            </span>
+                        </p>
+                        {% if booking.payment.paid_date %}
+                        <p><strong>Paid On:</strong> {{ booking.payment.paid_date|date:'d M Y H:i' }}</p>
+                        {% endif %}
+                        {% if booking.payment.mpesa_receipt %}
+                        <p><strong>M-Pesa Receipt:</strong> {{ booking.payment.mpesa_receipt }}</p>
+                        {% endif %}
+
+                        {% if booking.payment.status == 'pending' %}
+                        <a href="{% url 'payments:mpesa_payment' booking.id %}" class="main-btn mt-15">Complete Payment Now</a>
+                        {% endif %}
+                        {% endif %}
+
+                        {% if booking.status == 'approved' and not booking.review %}
+                        <hr>
+                        <h4>Leave a Review</h4>
+                        <form action="{% url 'bookings:add_review' booking.tour.slug %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="booking_id" value="{{ booking.id }}">
+                            <div class="single_form mb-15">
+                                <select name="rating" class="form-control" required>
+                                    <option value="">Rating</option>
+                                    <option value="5">5 - Excellent</option>
+                                    <option value="4">4 - Very Good</option>
+                                    <option value="3">3 - Good</option>
+                                    <option value="2">2 - Fair</option>
+                                    <option value="1">1 - Poor</option>
+                                </select>
+                            </div>
+                            <div class="single_form mb-15">
+                                <textarea name="comment" class="form-control" placeholder="Your review..." required></textarea>
+                            </div>
+                            <button type="submit" class="main-btn">Submit Review</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+{% if booking.payment.status == 'pending' %}
+<script>
+var tries = 0;
+(function poll() {
+    if (tries++ > 20) return;
+    setTimeout(function() { location.reload(); }, 5000);
+})();
+</script>
+{% endif %}
+{% endblock %}

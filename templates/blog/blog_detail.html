@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ post.title }} - Vacay Adventure{% endblock %}
+{% block content %}
+<section class="pt-130 pb-130">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <article>
+                    <h2>{{ post.title }}</h2>
+                    <p><small>Posted by {{ post.author|default:'Admin' }} on {{ post.created_at|date:'d F Y' }}</small></p>
+                    {% if post.category %}<p><span class="badge badge-primary">{{ post.category.name }}</span></p>{% endif %}
+                    {% if post.featured_image %}
+                    <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" style="width:100%;height:400px;object-fit:cover;border-radius:8px;" class="mb-30">
+                    {% endif %}
+                    <div class="blog_content">
+                        {{ post.content|linebreaks }}
+                    </div>
+                </article>
+            </div>
+            <div class="col-lg-4">
+                <div class="blog_sidebar">
+                    <h4>Categories</h4>
+                    <ul class="mt-15">
+                        {% for cat in categories %}
+                        <li><a href="{% url 'blog:blog_list' %}?category={{ cat.slug }}">{{ cat.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                    <h4 class="mt-30">Recent Posts</h4>
+                    <ul class="mt-15">
+                        {% for rp in recent_posts %}
+                        <li><a href="{% url 'blog:blog_detail' rp.slug %}">{{ rp.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}My Bookings - Vacay Adventure{% endblock %}
+{% block content %}
+<section class="pt-130 pb-130">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h3 class="mb-30">My Bookings</h3>
+                {% if bookings %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Tour</th>
+                                <th>Date</th>
+                                <th>Guests</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for booking in bookings %}
+                            <tr>
+                                <td>{{ booking.id }}</td>
+                                <td><a href="{% url 'tour_detail' booking.tour.slug %}">{{ booking.tour.title }}</a></td>
+                                <td>{{ booking.travel_date }}</td>
+                                <td>{{ booking.total_guests }}</td>
+                                <td>KSh {{ booking.total_price }}</td>
+                                <td><span class="badge badge-{% if booking.status == 'approved' %}success{% elif booking.status == 'pending' %}warning{% elif booking.status == 'cancelled' %}danger{% else %}info{% endif %}">{{ booking.get_status_display }}</span></td>
+                                <td>
+                                    <a href="{% url 'bookings:booking_detail' booking.id %}" class="main-btn" style="padding:5px 15px;font-size:14px;">View</a>
+                                    {% if booking.status == 'pending' and booking.payment.status == 'pending' %}
+                                    <a href="{% url 'payments:mpesa_payment' booking.id %}" class="main-btn" style="padding:5px 15px;font-size:14px;background:#28a745;">Pay Now</a>
+                                    {% elif booking.status == 'approved' %}
+                                    <a href="{% url 'bookings:cancel_booking' booking.id %}" class="main-btn" style="padding:5px 15px;font-size:14px;background:#dc3545;" onclick="return confirm('Are you sure you want to cancel this booking?')">Cancel</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p>You have no bookings yet. <a href="{% url 'tour_list' %}">Browse tours</a> to get started.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

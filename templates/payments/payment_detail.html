@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Payment Details{% endblock %}
+{% block content %}
+<section class="page-banner pt-200 pb-100" style="background-image: url('{% static 'img/page-banner.jpg' %}');">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb-text">
+                    <h1>Payment Details</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{% url 'bookings:user_bookings' %}">My Bookings</a></li>
+                            <li class="breadcrumb-item active">Payment</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="payment-detail pt-70 pb-120">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h4>Payment #{{ payment.reference_number }}</h4>
+                        <hr>
+                        <p><strong>Amount:</strong> KES {{ payment.amount|floatformat:0 }}</p>
+                        <p><strong>Method:</strong> {{ payment.get_method_display }}</p>
+                        <p><strong>Status:</strong>
+                            <span class="badge bg-{% if payment.status == 'completed' %}success{% elif payment.status == 'failed' %}danger{% else %}warning{% endif %}">
+                                {{ payment.get_status_display }}
+                            </span>
+                        </p>
+                        {% if payment.phone_number %}<p><strong>Phone:</strong> {{ payment.phone_number }}</p>{% endif %}
+                        {% if payment.mpesa_receipt %}<p><strong>M-Pesa Receipt:</strong> {{ payment.mpesa_receipt }}</p>{% endif %}
+                        {% if payment.paid_date %}<p><strong>Paid On:</strong> {{ payment.paid_date|date:"M d, Y H:i" }}</p>{% endif %}
+                        <hr>
+                        <a href="{% url 'bookings:booking_detail' payment.booking.id %}" class="main-btn">View Booking</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

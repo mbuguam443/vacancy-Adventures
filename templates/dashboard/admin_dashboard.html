@@ -1,0 +1,106 @@
+{% extends 'dashboard/admin/base_admin.html' %}
+{% load static %}
+{% block title %}Admin Dashboard - Vacay Adventure{% endblock %}
+{% block admin_content %}
+<div class="page-header">
+    <h1>Dashboard Overview</h1>
+</div>
+
+<div class="stat-row">
+    <div class="stat-card">
+        <div class="stat-icon blue"><i class="lni lni-users"></i></div>
+        <div class="stat-info">
+            <div class="stat-number">{{ total_customers }}</div>
+            <div class="stat-label">Total Customers</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon gold"><i class="lni lni-calendar"></i></div>
+        <div class="stat-info">
+            <div class="stat-number">{{ total_bookings }}</div>
+            <div class="stat-label">Total Bookings</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon red"><i class="lni lni-alarm"></i></div>
+        <div class="stat-info">
+            <div class="stat-number">{{ pending_bookings }}</div>
+            <div class="stat-label">Pending</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon green"><i class="lni lni-map"></i></div>
+        <div class="stat-info">
+            <div class="stat-number">{{ total_tours }}</div>
+            <div class="stat-label">Total Tours</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon purple"><i class="lni lni-credit-cards"></i></div>
+        <div class="stat-info">
+            <div class="stat-number">KSh {{ total_revenue|floatformat:0 }}</div>
+            <div class="stat-label">Total Revenue</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon gold"><i class="lni lni-stats-up"></i></div>
+        <div class="stat-info">
+            <div class="stat-number">KSh {{ monthly_revenue|floatformat:0 }}</div>
+            <div class="stat-label">This Month</div>
+        </div>
+    </div>
+</div>
+
+<div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:20px">
+    <div class="card-admin">
+        <div class="card-body">
+            <h5 style="font-size:15px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px">
+                <i class="lni lni-calendar" style="color:var(--brand)"></i> Recent Bookings
+            </h5>
+            <div class="table-responsive">
+                <table class="table-admin">
+                    <thead><tr><th>User</th><th>Tour</th><th>Status</th><th>Amount</th></tr></thead>
+                    <tbody>
+                        {% for b in recent_bookings %}
+                        <tr>
+                            <td>{{ b.user.username }}</td>
+                            <td>{{ b.tour.title }}</td>
+                            <td><span class="badge-status badge-{{ b.status }}">{{ b.get_status_display }}</span></td>
+                            <td style="font-weight:500">KSh {{ b.total_price|floatformat:0 }}</td>
+                        </tr>
+                        {% empty %}<tr><td colspan="4" style="text-align:center;padding:24px;color:#94a3b8">No bookings yet.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="card-admin">
+        <div class="card-body">
+            <h5 style="font-size:15px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px">
+                <i class="lni lni-envelope" style="color:var(--brand)"></i> Unread Messages
+            </h5>
+            {% for m in recent_messages %}
+            <div style="padding:12px 0;border-bottom:1px solid #f1f5f9">
+                <strong style="font-size:14px">{{ m.name }}</strong>
+                <p style="font-size:13px;color:#64748b;margin:2px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ m.message|truncatewords:12 }}</p>
+            </div>
+            {% empty %}<p style="color:#94a3b8;font-size:14px;text-align:center;padding:24px 0">No unread messages.</p>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="card-admin">
+        <div class="card-body">
+            <h5 style="font-size:15px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px">
+                <i class="lni lni-user" style="color:var(--brand)"></i> Recent Subscribers
+            </h5>
+            {% for s in recent_subscribers %}
+            <div style="padding:10px 0;border-bottom:1px solid #f1f5f9">
+                <span style="font-size:14px">{{ s.email }}</span>
+            </div>
+            {% empty %}<p style="color:#94a3b8;font-size:14px;text-align:center;padding:24px 0">No subscribers yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

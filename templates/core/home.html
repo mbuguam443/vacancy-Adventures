@@ -1,0 +1,316 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Vacay Adventure - Explore the World with Confidence{% endblock %}
+
+{% block hero %}
+<section class="header_area">
+    <div id="home" class="header_slider">
+        <div class="single_slider bg_cover d-flex align-items-center" style="background-image: url({% static 'images/hero-area.jpg' %})">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-8">
+                        <div class="slider_content">
+                            <h2 class="slider_title wow fadeInLeftBig" data-wow-duration="1.3s" data-wow-delay="0.2s">Explore The World with<span> Vacay Adventure</span></h2>
+                            <p class="wow fadeInLeftBig" data-wow-duration="1.3s" data-wow-delay="0.5s">Discover unforgettable travel experiences across Africa. From breathtaking safaris to pristine beaches, adventure awaits.</p>
+                            <a href="/tours/" class="main-btn wow fadeInLeftBig" data-wow-duration="1.3s" data-wow-delay="0.8s">Explore Tours</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+
+<!-- About / Stats Section -->
+<section id="about" class="about_area pt-130 pb-130">
+    <div class="about_wrapper">
+        <div class="about_image bg_cover" style="background-image: url({% static 'images/about_image.jpg' %})"></div>
+        <div class="container">
+            <div class="row justify-content-end">
+                <div class="col-lg-6">
+                    <div class="about_content">
+                        <div class="section_title">
+                            <h3 class="title">About Us <br> Vacay Adventure in <span>Numbers</span></h3>
+                            <p>{{ site_settings.about_short|default:'Vacay Adventure is your premier travel companion for exploring the wonders of Africa. We specialize in crafting unforgettable safari experiences, beach holidays, and cultural adventures.' }}</p>
+                        </div>
+                        <a href="/about/" class="main-btn">Read More</a>
+                    </div>
+                    <div class="about_counter d-flex flex-wrap">
+                        <div class="single_counter counter_1 d-flex justify-content-center align-items-center wow fadeInUpBig" data-wow-duration="1.3s" data-wow-delay="0.2s">
+                            <div class="counter_wrapper">
+                                <span class="counter">{{ site_settings.trips_done|default:'500' }}</span>
+                                <p>Trips Done</p>
+                            </div>
+                        </div>
+                        <div class="single_counter counter_2 d-flex justify-content-center align-items-center wow fadeInUpBig" data-wow-duration="1.3s" data-wow-delay="0.5s">
+                            <div class="counter_wrapper">
+                                <span class="counter">{{ site_settings.corporate_clients|default:'400' }}</span>
+                                <p>Corporate Clients</p>
+                            </div>
+                        </div>
+                        <div class="single_counter counter_2 d-flex justify-content-center align-items-center wow fadeInUpBig" data-wow-duration="1.3s" data-wow-delay="0.8s">
+                            <div class="counter_wrapper">
+                                <span class="counter">{{ site_settings.visited_countries|default:'30' }}</span>
+                                <p>Visited Countries</p>
+                            </div>
+                        </div>
+                        <div class="single_counter counter_1 d-flex justify-content-center align-items-center wow fadeInUpBig" data-wow-duration="1.3s" data-wow-delay="1.1s">
+                            <div class="counter_wrapper">
+                                <span class="counter">{{ site_settings.team_members|default:'15' }}</span>
+                                <p>Team Members</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Tours -->
+<section id="packges" class="destination_area pt-130 pb-130">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="section_title text-center pb-25">
+                    <h3 class="title">Popular Tour Packages</h3>
+                    <p>Discover our most popular tours and embark on the adventure of a lifetime.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            {% for tour in featured_tours %}
+            <div class="col-lg-4 col-sm-6">
+                <div class="single_service mt-30 text-center wow fadeInUpBig" data-wow-duration="1.3s" data-wow-delay="0.{{ forloop.counter }}s">
+                    <div class="services_icon">
+                        <i class="lni lni-map-marker"></i>
+                    </div>
+                    <div class="services_content">
+                        <h4 class="title">{{ tour.title }}</h4>
+                        <p>{{ tour.duration_days }} Days / {{ tour.duration_nights }} Nights</p>
+                        <p><strong>
+                            {% if tour.discount_price %}
+                            <span style="text-decoration:line-through;color:#999;">KSh {{ tour.price }}</span> KSh {{ tour.discount_price }}
+                            {% else %}
+                            KSh {{ tour.price }}
+                            {% endif %}
+                        </strong></p>
+                        <a href="{% url 'tour_detail' tour.slug %}" class="main-btn mt-2">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center"><p>No tours available yet.</p></div>
+            {% endfor %}
+        </div>
+        {% if not featured_tours %}
+        <div class="section_title text-center pb-25 mt-4">
+            <p>Please run <code>python manage.py seed</code> to populate sample data.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Services -->
+<section id="services" class="services_area pt-120">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="section_title text-center pb-25">
+                    <h3 class="title">Service We Provide</h3>
+                    <p>Comprehensive travel services to make your journey seamless and memorable.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            {% for service in services %}
+            <div class="col-lg-3 col-sm-6">
+                <div class="single_service mt-30 text-center wow fadeInUpBig" data-wow-duration="1.3s" data-wow-delay="0.{{ forloop.counter }}s">
+                    <div class="services_icon">
+                        <i class="{{ service.icon }}"></i>
+                    </div>
+                    <div class="services_content">
+                        <h4 class="title">{{ service.title }}</h4>
+                        <p>{{ service.description }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Gallery Preview -->
+<section id="gallery" class="gallery_area pt-120 pb-130">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="section_title text-center pb-25">
+                    <h3 class="title">Our Gallery</h3>
+                    <p>Beautiful moments captured during our tours across Africa.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            {% for item in gallery_items %}
+            <div class="col-lg-4 col-sm-6">
+                <div class="single_service mt-30 text-center wow fadeInUpBig" data-wow-duration="1.3s" data-wow-delay="0.{{ forloop.counter }}s">
+                    <div class="services_icon">
+                        {% if item.image %}
+                        <img src="{{ item.image.url }}" alt="{{ item.caption }}" style="width:100%;height:200px;object-fit:cover;border-radius:8px;">
+                        {% else %}
+                        <i class="lni lni-image" style="font-size:60px;"></i>
+                        {% endif %}
+                    </div>
+                    <div class="services_content">
+                        <p>{{ item.caption }}</p>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center"><p>No gallery images yet.</p></div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-30">
+            <a href="/gallery/" class="main-btn">View All Gallery</a>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section id="testimonial" class="testimonial_area pt-120">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="section_title text-center pb-25">
+                    <h3 class="title">What Our Clients Say</h3>
+                    <p>Hear from travelers who have experienced Vacay Adventure.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            {% for testimonial in testimonials %}
+            <div class="col-lg-4 col-sm-6">
+                <div class="single_service mt-30 text-center wow fadeInUpBig" data-wow-duration="1.3s" data-wow-delay="0.{{ forloop.counter }}s">
+                    <div class="services_icon">
+                        {% if testimonial.image %}
+                        <img src="{{ testimonial.image.url }}" alt="{{ testimonial.name }}" style="width:80px;height:80px;object-fit:cover;border-radius:50%;">
+                        {% else %}
+                        <i class="lni lni-user" style="font-size:60px;"></i>
+                        {% endif %}
+                    </div>
+                    <div class="services_content">
+                        <h4 class="title">{{ testimonial.name }}</h4>
+                        <p><small>{{ testimonial.designation }}</small></p>
+                        <p>"{{ testimonial.content|truncatewords:30 }}"</p>
+                        <div class="text-warning">
+                            {% for i in "12345"|slice:":testimonial.rating" %}
+                            <i class="lni lni-star-filled"></i>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center"><p>No testimonials yet.</p></div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Blog Preview -->
+<section id="blog" class="blog_area pt-120 pb-130">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="section_title text-center pb-25">
+                    <h3 class="title">Recent Blog Posts</h3>
+                    <p>Travel tips, destination guides, and stories from our adventures.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            {% for post in blog_posts %}
+            <div class="col-lg-6">
+                <div class="single_blog mt-30">
+                    <div class="blog_image">
+                        {% if post.featured_image %}
+                        <img src="{{ post.featured_image.url }}" alt="{{ post.title }}">
+                        {% else %}
+                        <img src="{% static 'images/blog-1.jpg' %}" alt="Blog">
+                        {% endif %}
+                    </div>
+                    <div class="blog_content">
+                        <div class="blog_meta">
+                            <ul>
+                                <li>Posted by: <a href="javascript:void(0)">{{ post.author|default:'Admin' }}</a></li>
+                                <li>{{ post.created_at|date:'d F Y' }}</li>
+                            </ul>
+                        </div>
+                        <h4 class="blog_title"><a href="{% url 'blog:blog_detail' post.slug %}">{{ post.title }}</a></h4>
+                        <p>{{ post.excerpt|default:post.content|truncatewords:30 }}</p>
+                        <a href="{% url 'blog:blog_detail' post.slug %}" class="more">Read More <i class="lni lni-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center"><p>No blog posts yet.</p></div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Contact -->
+<section id="contact" class="contact_area pt-120 pb-130">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="section_title text-center pb-25">
+                    <h3 class="title">Get in Touch</h3>
+                    <p>Have a question or ready to plan your trip? We'd love to hear from you.</p>
+                </div>
+            </div>
+        </div>
+        <div class="contact_form">
+            <form action="{% url 'contact' %}" method="POST">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="single_form">
+                            <input type="text" name="name" id="name" placeholder="Name" required>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="single_form">
+                            <input type="text" name="phone" id="phone" placeholder="Phone">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="single_form">
+                            <input type="email" name="email" id="email" placeholder="Email" required>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="single_form">
+                            <input type="text" name="subject" id="subject" placeholder="Subject">
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="single_form">
+                            <textarea name="message" id="message" placeholder="Message" required></textarea>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="single_form">
+                            <button type="submit" class="main-btn">Send Message</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

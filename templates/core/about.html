@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}About Us - Vacay Adventure{% endblock %}
+{% block hero %}
+<section class="header_area">
+    <div id="home" class="header_slider">
+        <div class="single_slider bg_cover d-flex align-items-center" style="background-image: url({% static 'images/hero-area.jpg' %})">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-8">
+                        <div class="slider_content">
+                            <h2 class="slider_title wow fadeInLeftBig" data-wow-duration="1.3s" data-wow-delay="0.2s">About <span>Us</span></h2>
+                            <p class="wow fadeInLeftBig" data-wow-duration="1.3s" data-wow-delay="0.5s">Learn more about Vacay Adventure and our mission to deliver unforgettable travel experiences.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+{% block content %}
+<section class="about_area pt-130 pb-130">
+    <div class="about_wrapper">
+        <div class="about_image bg_cover" style="background-image: url({% static 'images/about_image.jpg' %})"></div>
+        <div class="container">
+            <div class="row justify-content-end">
+                <div class="col-lg-6">
+                    <div class="about_content">
+                        <div class="section_title">
+                            <h3 class="title">About Vacay Adventure</h3>
+                            <p>Vacay Adventure is a premier tour and travel management company dedicated to providing exceptional travel experiences across Africa. With years of experience, we have served thousands of happy travelers.</p>
+                            <p>Our team of expert guides, travel consultants, and support staff work tirelessly to ensure every journey is seamless, safe, and memorable. From the vast savannahs of the Masai Mara to the pristine beaches of Diani, we cover the best destinations Africa has to offer.</p>
+                        </div>
+                    </div>
+                    <div class="about_counter d-flex flex-wrap mt-4">
+                        <div class="single_counter counter_1 d-flex justify-content-center align-items-center wow fadeInUpBig" data-wow-duration="1.3s" data-wow-delay="0.2s">
+                            <div class="counter_wrapper">
+                                <span class="counter">{{ site_settings.trips_done|default:'500' }}</span>
+                                <p>Trips Done</p>
+                            </div>
+                        </div>
+                        <div class="single_counter counter_2 d-flex justify-content-center align-items-center wow fadeInUpBig" data-wow-duration="1.3s" data-wow-delay="0.5s">
+                            <div class="counter_wrapper">
+                                <span class="counter">{{ site_settings.corporate_clients|default:'400' }}</span>
+                                <p>Corporate Clients</p>
+                            </div>
+                        </div>
+                        <div class="single_counter counter_2 d-flex justify-content-center align-items-center wow fadeInUpBig" data-wow-duration="1.3s" data-wow-delay="0.8s">
+                            <div class="counter_wrapper">
+                                <span class="counter">{{ site_settings.visited_countries|default:'30' }}</span>
+                                <p>Visited Countries</p>
+                            </div>
+                        </div>
+                        <div class="single_counter counter_1 d-flex justify-content-center align-items-center wow fadeInUpBig" data-wow-duration="1.3s" data-wow-delay="1.1s">
+                            <div class="counter_wrapper">
+                                <span class="counter">{{ site_settings.team_members|default:'15' }}</span>
+                                <p>Team Members</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="services_area pt-120">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="section_title text-center pb-25">
+                    <h3 class="title">Service We Provide</h3>
+                    <p>Comprehensive travel services to make your journey seamless.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            {% for service in services %}
+            <div class="col-lg-3 col-sm-6">
+                <div class="single_service mt-30 text-center wow fadeInUpBig" data-wow-duration="1.3s" data-wow-delay="0.{{ forloop.counter }}s">
+                    <div class="services_icon">
+                        <i class="{{ service.icon }}"></i>
+                    </div>
+                    <div class="services_content">
+                        <h4 class="title">{{ service.title }}</h4>
+                        <p>{{ service.description }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

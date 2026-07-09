@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Tour Packages - Vacay Adventure{% endblock %}
+{% block hero %}
+<section class="header_area">
+    <div id="home" class="header_slider">
+        <div class="single_slider bg_cover d-flex align-items-center" style="background-image: url({% static 'images/hero-area.jpg' %})">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-8">
+                        <div class="slider_content">
+                            <h2 class="slider_title wow fadeInLeftBig" data-wow-duration="1.3s" data-wow-delay="0.2s">Tour <span>Packages</span></h2>
+                            <p class="wow fadeInLeftBig" data-wow-duration="1.3s" data-wow-delay="0.5s">Explore our wide range of tour packages and find your perfect adventure.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+{% block content %}
+<section class="pt-120 pb-130">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="filter_sidebar">
+                    <h4 class="mb-20">Filter Tours</h4>
+                    <form method="GET" action="{% url 'tour_list' %}">
+                        <div class="single_form mb-15">
+                            <select name="category">
+                                <option value="">All Categories</option>
+                                <option value="safari" {% if current_category == 'safari' %}selected{% endif %}>Safari</option>
+                                <option value="beach" {% if current_category == 'beach' %}selected{% endif %}>Beach</option>
+                                <option value="cultural" {% if current_category == 'cultural' %}selected{% endif %}>Cultural</option>
+                                <option value="adventure" {% if current_category == 'adventure' %}selected{% endif %}>Adventure</option>
+                                <option value="wildlife" {% if current_category == 'wildlife' %}selected{% endif %}>Wildlife</option>
+                                <option value="luxury" {% if current_category == 'luxury' %}selected{% endif %}>Luxury</option>
+                            </select>
+                        </div>
+                        <div class="single_form mb-15">
+                            <select name="destination">
+                                <option value="">All Destinations</option>
+                                {% for dest in destinations %}
+                                <option value="{{ dest.slug }}" {% if current_destination == dest.slug %}selected{% endif %}>{{ dest.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="single_form mb-15">
+                            <select name="difficulty">
+                                <option value="">All Difficulties</option>
+                                <option value="easy" {% if current_difficulty == 'easy' %}selected{% endif %}>Easy</option>
+                                <option value="moderate" {% if current_difficulty == 'moderate' %}selected{% endif %}>Moderate</option>
+                                <option value="challenging" {% if current_difficulty == 'challenging' %}selected{% endif %}>Challenging</option>
+                            </select>
+                        </div>
+                        <div class="single_form mb-15">
+                            <select name="sort">
+                                <option value="-created_at" {% if current_sort == '-created_at' %}selected{% endif %}>Newest</option>
+                                <option value="price" {% if current_sort == 'price' %}selected{% endif %}>Price: Low to High</option>
+                                <option value="-price" {% if current_sort == '-price' %}selected{% endif %}>Price: High to Low</option>
+                                <option value="duration_days" {% if current_sort == 'duration_days' %}selected{% endif %}>Duration: Short</option>
+                                <option value="-duration_days" {% if current_sort == '-duration_days' %}selected{% endif %}>Duration: Long</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="main-btn">Apply Filters</button>
+                        <a href="{% url 'tour_list' %}" class="main-btn mt-2" style="background:#6c757d;">Reset</a>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                {% if query %}<h5 class="mb-20">Search: "{{ query }}"</h5>{% endif %}
+                <div class="row">
+                    {% for tour in tours %}
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="single_service mt-30 text-center">
+                            <div class="services_icon">
+                                {% with main_img=tour.images.first %}
+                                {% if main_img %}
+                                <img src="{{ main_img.image.url }}" alt="{{ tour.title }}" style="width:100%;height:200px;object-fit:cover;border-radius:8px;">
+                                {% else %}
+                                <i class="lni lni-map-marker" style="font-size:60px;"></i>
+                                {% endif %}
+                                {% endwith %}
+                            </div>
+                            <div class="services_content">
+                                <h4 class="title"><a href="{% url 'tour_detail' tour.slug %}">{{ tour.title }}</a></h4>
+                                <p><i class="lni lni-map-marker"></i> {{ tour.destination.name|default:'Various' }}</p>
+                                <p>{{ tour.duration_days }} Days / {{ tour.duration_nights }} Nights</p>
+                                <p>
+                                    <strong>
+                                    {% if tour.discount_price %}
+                                    <span style="text-decoration:line-through;color:#999;">KSh {{ tour.price }}</span> KSh {{ tour.discount_price }}
+                                    {% else %}
+                                    KSh {{ tour.price }}
+                                    {% endif %}
+                                    </strong>
+                                </p>
+                                <a href="{% url 'tour_detail' tour.slug %}" class="main-btn">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-12 text-center"><p>No tours found.</p></div>
+                    {% endfor %}
+                </div>
+                {% if tours.has_other_pages %}
+                <div class="row mt-30">
+                    <div class="col-12 text-center">
+                        {% if tours.has_previous %}
+                        <a href="?page={{ tours.previous_page_number }}" class="main-btn">Previous</a>
+                        {% endif %}
+                        <span>Page {{ tours.number }} of {{ tours.paginator.num_pages }}</span>
+                        {% if tours.has_next %}
+                        <a href="?page={{ tours.next_page_number }}" class="main-btn">Next</a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}FAQ - Vacay Adventure{% endblock %}
+{% block hero %}
+<section class="header_area">
+    <div id="home" class="header_slider">
+        <div class="single_slider bg_cover d-flex align-items-center" style="background-image: url({% static 'images/hero-area.jpg' %})">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-8">
+                        <div class="slider_content">
+                            <h2 class="slider_title wow fadeInLeftBig" data-wow-duration="1.3s" data-wow-delay="0.2s">Frequently Asked <span>Questions</span></h2>
+                            <p class="wow fadeInLeftBig" data-wow-duration="1.3s" data-wow-delay="0.5s">Find answers to common questions about our tours and services.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+{% block content %}
+<section class="pt-120 pb-130">
+    <div class="container">
+        <div class="row">
+            {% for faq in faqs %}
+            <div class="col-lg-6">
+                <div class="single_service mt-30 wow fadeInUpBig" data-wow-duration="1.3s" data-wow-delay="0.{{ forloop.counter }}s">
+                    <div class="services_content">
+                        <h4 class="title">{{ faq.question }}</h4>
+                        <p>{{ faq.answer }}</p>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center"><p>No FAQs available.</p></div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Register - Vacay Adventure{% endblock %}
+{% block hero %}
+<section class="header_area">
+    <div id="home" class="header_slider">
+        <div class="single_slider bg_cover d-flex align-items-center" style="background-image: url({% static 'images/hero-area.jpg' %})">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-8">
+                        <div class="slider_content">
+                            <h2 class="slider_title wow fadeInLeftBig" data-wow-duration="1.3s" data-wow-delay="0.2s">Create <span>Account</span></h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+{% block content %}
+<section class="pt-120 pb-130">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title text-center mb-30">Create Your Account</h4>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-6"><div class="single_form"><input type="text" name="username" placeholder="Username" required class="form-control"></div></div>
+                                <div class="col-md-6"><div class="single_form"><input type="email" name="email" placeholder="Email" required class="form-control"></div></div>
+                                <div class="col-md-6"><div class="single_form mt-15"><input type="text" name="first_name" placeholder="First Name" required class="form-control"></div></div>
+                                <div class="col-md-6"><div class="single_form mt-15"><input type="text" name="last_name" placeholder="Last Name" required class="form-control"></div></div>
+                                <div class="col-md-6"><div class="single_form mt-15"><input type="password" name="password1" placeholder="Password" required class="form-control"></div></div>
+                                <div class="col-md-6"><div class="single_form mt-15"><input type="password" name="password2" placeholder="Confirm Password" required class="form-control"></div></div>
+                            </div>
+                            <button type="submit" class="main-btn mt-15" style="width:100%;">Register</button>
+                        </form>
+                        <p class="text-center mt-15">Already have an account? <a href="{% url 'accounts:login' %}">Login here</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

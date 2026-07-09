@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Login - Vacay Adventure{% endblock %}
+{% block hero %}
+<section class="header_area">
+    <div id="home" class="header_slider">
+        <div class="single_slider bg_cover d-flex align-items-center" style="background-image: url({% static 'images/hero-area.jpg' %})">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-8">
+                        <div class="slider_content">
+                            <h2 class="slider_title wow fadeInLeftBig" data-wow-duration="1.3s" data-wow-delay="0.2s">Customer <span>Login</span></h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+{% block content %}
+<section class="pt-120 pb-130">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-5">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title text-center mb-30">Login to Your Account</h4>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="single_form">
+                                <input type="text" name="username" placeholder="Username" required class="form-control">
+                            </div>
+                            <div class="single_form mt-15">
+                                <input type="password" name="password" placeholder="Password" required class="form-control">
+                            </div>
+                            <button type="submit" class="main-btn mt-15" style="width:100%;">Login</button>
+                        </form>
+                        <p class="text-center mt-15">Don't have an account? <a href="{% url 'accounts:register' %}">Register here</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

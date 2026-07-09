@@ -1,0 +1,52 @@
+{% extends 'dashboard/admin/base_admin.html' %}
+{% block title %}Message from {{ msg.name }} - Admin{% endblock %}
+{% block admin_content %}
+<div class="page-header">
+    <h1>Message from {{ msg.name }}</h1>
+    <a href="{{ list_url }}" class="btn-admin btn-admin-outline"><i class="lni lni-arrow-left" style="font-size:14px"></i> Back to List</a>
+</div>
+<div class="card-admin">
+    <div class="card-body">
+        <div class="grid-2">
+            <div class="form-group">
+                <label style="color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:.5px">Name</label>
+                <div style="font-size:15px;font-weight:500">{{ msg.name }}</div>
+            </div>
+            <div class="form-group">
+                <label style="color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:.5px">Email</label>
+                <div style="font-size:15px;font-weight:500">{{ msg.email }}</div>
+            </div>
+            {% if msg.phone %}
+            <div class="form-group">
+                <label style="color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:.5px">Phone</label>
+                <div style="font-size:15px;font-weight:500">{{ msg.phone }}</div>
+            </div>
+            {% endif %}
+            {% if msg.subject %}
+            <div class="form-group">
+                <label style="color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:.5px">Subject</label>
+                <div style="font-size:15px;font-weight:500">{{ msg.subject }}</div>
+            </div>
+            {% endif %}
+            <div class="form-group">
+                <label style="color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:.5px">Date</label>
+                <div style="font-size:15px;font-weight:500">{{ msg.created_at|date:"d M Y H:i" }}</div>
+            </div>
+            <div class="form-group">
+                <label style="color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:.5px">Status</label>
+                <div style="font-size:15px;font-weight:500">{% if msg.is_read %}<span class="badge-status badge-published">Read</span>{% else %}<span class="badge-status badge-pending">Unread</span>{% endif %}</div>
+            </div>
+        </div>
+        <div class="form-group" style="margin-top:20px">
+            <label style="color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:.5px">Message</label>
+            <div style="background:#f8fafc;padding:16px;border-radius:8px;font-size:14px;line-height:1.7;margin-top:6px;white-space:pre-wrap">{{ msg.message }}</div>
+        </div>
+        {% if not msg.is_read %}
+        <form method="post" style="margin-top:24px;padding-top:20px;border-top:1px solid var(--border)">
+            {% csrf_token %}
+            <button type="submit" class="btn-admin btn-admin-primary"><i class="lni lni-checkmark-circle"></i> Mark as Read</button>
+        </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

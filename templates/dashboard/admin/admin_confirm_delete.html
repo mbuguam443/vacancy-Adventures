@@ -1,0 +1,23 @@
+{% extends 'dashboard/admin/base_admin.html' %}
+{% load static %}
+{% block title %}Delete {{ object }} - Admin{% endblock %}
+{% block admin_content %}
+<div class="page-header">
+    <h1>Delete {{ object }}</h1>
+    <a href="{{ list_url }}" class="btn-admin btn-admin-outline"><i class="lni lni-arrow-left" style="font-size:14px"></i> Back to List</a>
+</div>
+<div class="card-admin" style="max-width:500px">
+    <div class="card-body" style="text-align:center;padding:48px">
+        <i class="lni lni-warning" style="font-size:48px;color:#dc2626;margin-bottom:16px;display:block"></i>
+        <h4 style="margin-bottom:12px;font-size:18px;font-weight:600">Are you sure?</h4>
+        <p style="color:#64748b;margin-bottom:24px;font-size:14px">You are about to delete <strong>"{{ object }}"</strong>. This action cannot be undone.</p>
+        <form method="post">
+            {% csrf_token %}
+            <div class="flex items-center gap-8" style="justify-content:center">
+                <button type="submit" class="btn-admin btn-admin-danger"><i class="lni lni-trash-can"></i> Yes, Delete</button>
+                <a href="{{ list_url }}" class="btn-admin btn-admin-outline">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

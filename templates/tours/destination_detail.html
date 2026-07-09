@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ destination.name }} - Vacay Adventure{% endblock %}
+{% block content %}
+<section class="pt-130 pb-130">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="mb-30">
+                    <img src="{{ destination.featured_image.url }}" alt="{{ destination.name }}" style="width:100%;height:400px;object-fit:cover;border-radius:8px;">
+                </div>
+                <h3>{{ destination.name }}</h3>
+                <p><i class="lni lni-map-marker"></i> {{ destination.country }}{% if destination.city %}, {{ destination.city }}{% endif %}</p>
+                {% if destination.best_season %}<p><strong>Best Season:</strong> {{ destination.best_season }}</p>{% endif %}
+                <hr>
+                <p>{{ destination.description|linebreaks }}</p>
+            </div>
+            <div class="col-lg-4">
+                <h4>Tours in {{ destination.name }}</h4>
+                {% for tour in tours %}
+                <div class="card mt-15">
+                    <div class="card-body">
+                        <h5><a href="{% url 'tour_detail' tour.slug %}">{{ tour.title }}</a></h5>
+                        <p>{{ tour.duration_days }} Days | KSh {{ tour.discount_price|default:tour.price }}</p>
+                    </div>
+                </div>
+                {% empty %}
+                <p>No tours available for this destination.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

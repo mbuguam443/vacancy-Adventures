@@ -1,0 +1,33 @@
+{% extends 'dashboard/admin/base_admin.html' %}
+{% load static %}
+{% block title %}{{ page_title }} - Admin{% endblock %}
+{% block admin_content %}
+<div class="page-header">
+    <h1>{{ page_title }}</h1>
+    <a href="{{ list_url }}" class="btn-admin btn-admin-outline"><i class="lni lni-arrow-left" style="font-size:14px"></i> Back to List</a>
+</div>
+<div class="card-admin">
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data" class="form-admin">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {% if field.field.widget.input_type == 'file' and field.value %}
+                <div style="margin-bottom:8px;">
+                    <img src="{{ field.value.url }}" alt="{{ field.label }}" style="max-width:200px;max-height:80px;border-radius:8px;border:1px solid var(--border);">
+                </div>
+                {% endif %}
+                {{ field }}
+                {% if field.help_text %}<span class="help-text">{{ field.help_text }}</span>{% endif %}
+                {% for err in field.errors %}<span class="error-text">{{ err }}</span>{% endfor %}
+            </div>
+            {% endfor %}
+            <div class="flex items-center gap-8" style="margin-top:28px;padding-top:20px;border-top:1px solid var(--border)">
+                <button type="submit" class="btn-admin btn-admin-primary"><i class="lni lni-save" style="font-size:14px"></i> Save</button>
+                <a href="{{ list_url }}" class="btn-admin btn-admin-outline">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

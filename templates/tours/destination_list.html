@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Destinations - Vacay Adventure{% endblock %}
+{% block hero %}
+<section class="header_area">
+    <div id="home" class="header_slider">
+        <div class="single_slider bg_cover d-flex align-items-center" style="background-image: url({% static 'images/hero-area.jpg' %})">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-8">
+                        <div class="slider_content">
+                            <h2 class="slider_title wow fadeInLeftBig" data-wow-duration="1.3s" data-wow-delay="0.2s">Our <span>Destinations</span></h2>
+                            <p class="wow fadeInLeftBig" data-wow-duration="1.3s" data-wow-delay="0.5s">Explore breathtaking destinations across Africa.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+{% block content %}
+<section class="pt-120 pb-130">
+    <div class="container">
+        <div class="row">
+            {% for destination in destinations %}
+            <div class="col-lg-4 col-sm-6">
+                <div class="single_service mt-30 text-center">
+                    <div class="services_icon">
+                        <img src="{{ destination.featured_image.url }}" alt="{{ destination.name }}" style="width:100%;height:250px;object-fit:cover;border-radius:8px;">
+                    </div>
+                    <div class="services_content">
+                        <h4 class="title">{{ destination.name }}</h4>
+                        <p><i class="lni lni-map-marker"></i> {{ destination.country }}{% if destination.city %}, {{ destination.city }}{% endif %}</p>
+                        <p>{{ destination.description|truncatewords:20 }}</p>
+                        {% if destination.best_season %}<p><small>Best Season: {{ destination.best_season }}</small></p>{% endif %}
+                        <a href="{% url 'destination_detail' destination.slug %}" class="main-btn">Explore</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center"><p>No destinations available.</p></div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

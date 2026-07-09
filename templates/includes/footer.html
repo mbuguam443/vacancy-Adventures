@@ -1,0 +1,63 @@
+{% load static %}
+<section id="footer" class="footer_area">
+    <div class="footer_widget pt-80 pb-130">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-6 order-md-1 order-lg-1">
+                    <div class="footer_about mt-50">
+                        <a href="/">
+                            {% if site_settings and site_settings.logo %}
+                            <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_name }}" height="40">
+                            {% else %}
+                            <img src="{% static 'images/logo.svg' %}" alt="Vacay Adventure" height="40">
+                            {% endif %}
+                        </a>
+                        <p>{{ site_settings.about_short|default:'Explore the world with confidence. Vacay Adventure offers unforgettable travel experiences across Africa.' }}</p>
+                        <ul class="social">
+                            {% if site_settings.facebook %}<li><a class="social_1" href="{{ site_settings.facebook }}"><i class="lni lni-facebook-original"></i></a></li>{% endif %}
+                            {% if site_settings.twitter %}<li><a class="social_2" href="{{ site_settings.twitter }}"><i class="lni lni-twitter-original"></i></a></li>{% endif %}
+                            {% if site_settings.instagram %}<li><a class="social_3" href="{{ site_settings.instagram }}"><i class="lni lni-instagram-original"></i></a></li>{% endif %}
+                            {% if site_settings.linkedin %}<li><a class="social_4" href="{{ site_settings.linkedin }}"><i class="lni lni-linkedin-original"></i></a></li>{% endif %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-12 order-md-3 order-lg-2">
+                    <div class="footer_link_wrapper d-flex flex-wrap">
+                        <div class="footer_link mt-45">
+                            <h4 class="footer_title">Quick Link</h4>
+                            <ul class="link">
+                                <li><a href="/">Home</a></li>
+                                <li><a href="/about/">About</a></li>
+                                <li><a href="/tours/">Tour Packages</a></li>
+                                <li><a href="/gallery/">Gallery</a></li>
+                                <li><a href="/blog/">Blog</a></li>
+                            </ul>
+                        </div>
+                        <div class="footer_link mt-45">
+                            <h4 class="footer_title">Support</h4>
+                            <ul class="link">
+                                <li><a href="/contact/">Contact Us</a></li>
+                                <li><a href="/faq/">FAQ</a></li>
+                                <li><a href="/about/">About Us</a></li>
+                                <li><a href="/destinations/">Destinations</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 order-md-2 order-lg-3">
+                    <div class="footer_subscribe mt-45">
+                        <h4 class="footer_title">Subscribe Newsletter</h4>
+                        <p>Get the latest travel deals and updates.</p>
+                        <div class="subscribe_form">
+                            <form action="{% url 'newsletter_subscribe' %}" method="POST">
+                                {% csrf_token %}
+                                <input type="email" name="email" placeholder="Enter email" required>
+                                <button type="submit"><i class="lni lni-arrow-right"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

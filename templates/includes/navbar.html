@@ -1,0 +1,66 @@
+{% load static %}
+<section class="header_area">
+    <div class="header_navbar">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <nav class="navbar navbar-expand-lg">
+                        <a class="navbar-brand" href="/" style="font-size:24px;font-weight:700;color:#1e293b;display:flex;align-items:center;gap:8px">
+                            <i class="lni lni-compass" style="color:#ca8a04;font-size:28px"></i>
+                            Vacay <span style="color:#ca8a04">Adventures</span>
+                        </a>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="toggler-icon"></span>
+                            <span class="toggler-icon"></span>
+                            <span class="toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
+                            <ul id="nav" class="navbar-nav ml-auto">
+                                <li class="nav-item {% if request.path == '/' %}active{% endif %}">
+                                    <a class="page-scroll" href="/">Home</a>
+                                </li>
+                                <li class="nav-item {% if '/about' in request.path %}active{% endif %}">
+                                    <a class="page-scroll" href="/about/">About</a>
+                                </li>
+                                <li class="nav-item {% if '/tours' in request.path or '/destinations' in request.path %}active{% endif %}">
+                                    <a class="page-scroll" href="/tours/">Tours</a>
+                                </li>
+                                <li class="nav-item {% if '/gallery' in request.path %}active{% endif %}">
+                                    <a class="page-scroll" href="/gallery/">Gallery</a>
+                                </li>
+                                <li class="nav-item {% if '/blog' in request.path %}active{% endif %}">
+                                    <a class="page-scroll" href="/blog/">Blog</a>
+                                </li>
+                                <li class="nav-item {% if '/contact' in request.path %}active{% endif %}">
+                                    <a class="page-scroll" href="/contact/">Contact</a>
+                                </li>
+                                {% if user.is_authenticated %}
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="lni lni-user"></i> {{ user.username }}
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="userDropdown">
+                                        <a class="dropdown-item" href="{% url 'dashboard:customer_dashboard' %}">Dashboard</a>
+                                        <a class="dropdown-item" href="{% url 'accounts:profile' %}">Profile</a>
+                                        <a class="dropdown-item" href="{% url 'bookings:user_bookings' %}">My Bookings</a>
+                                        {% if user.is_staff %}
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="{% url 'dashboard:admin_dashboard' %}">Admin Panel</a>
+                                        {% endif %}
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a>
+                                    </div>
+                                </li>
+                                {% else %}
+                                <li class="nav-item">
+                                    <a class="page-scroll" href="{% url 'accounts:login' %}" style="padding:30px 20px;color:#ca8a04;font-weight:600;display:inline-block;border:2px solid #ca8a04;border-radius:6px;line-height:1">Login</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

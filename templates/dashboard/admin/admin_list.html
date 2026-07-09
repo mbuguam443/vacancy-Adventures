@@ -1,0 +1,52 @@
+{% extends 'dashboard/admin/base_admin.html' %}
+{% load static %}
+{% load admin_tags %}
+{% block title %}{{ page_title }} - Admin{% endblock %}
+{% block admin_content %}
+<div class="page-header">
+    <h1>{{ page_title }}</h1>
+    {% if add_url %}<a href="{{ add_url }}" class="btn-admin btn-admin-primary"><i class="lni lni-plus" style="font-size:14px"></i> Add New</a>{% endif %}
+</div>
+{% if search_field %}
+<form method="get" class="search-box">
+    <input type="text" name="q" class="search-input" placeholder="Search {{ model_name|lower }}..." value="{{ request.GET.q }}">
+    <button type="submit" class="btn-admin btn-admin-primary">Search</button>
+</form>
+{% endif %}
+<div class="card-admin">
+    <div class="table-responsive">
+        <table class="table-admin">
+            <thead>
+                <tr>
+                    {% for col in columns %}<th>{{ col.header }}</th>{% endfor %}
+                    <th style="text-align:right">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for obj in objects %}
+                <tr>
+                    {% for col in columns %}
+                    <td>{% include col.template_name with value=obj|get_attr:col.field %}</td>
+                    {% endfor %}
+                    <td class="actions">
+                        {% if edit_url %}<a href="{% url edit_url obj.pk %}" class="btn-admin-icon" title="Edit"><i class="lni lni-pencil"></i></a>{% endif %}
+                        {% if delete_url %}<a href="{% url delete_url obj.pk %}" class="btn-admin-icon" title="Delete" style="color:#dc2626"><i class="lni lni-trash"></i></a>{% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="{{ columns|length|add:1 }}" style="text-align:center;padding:40px;color:#94a3b8;font-size:14px">No {{ model_name|lower }} found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% if is_paginated %}
+<div class="pagination-admin">
+    {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Previous</a>{% else %}<span class="disabled">Previous</span>{% endif %}
+    {% for n in page_obj.paginator.page_range %}
+    <a href="?page={{ n }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" {% if page_obj.number == n %}class="active"{% endif %}>{{ n }}</a>
+    {% endfor %}
+    {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Next</a>{% else %}<span class="disabled">Next</span>{% endif %}
+</div>
+{% endif %}
+{% endblock %}

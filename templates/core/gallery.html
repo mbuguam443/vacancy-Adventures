@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Gallery - Vacay Adventure{% endblock %}
+{% block hero %}
+<section class="header_area">
+    <div id="home" class="header_slider">
+        <div class="single_slider bg_cover d-flex align-items-center" style="background-image: url({% static 'images/hero-area.jpg' %})">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-8">
+                        <div class="slider_content">
+                            <h2 class="slider_title wow fadeInLeftBig" data-wow-duration="1.3s" data-wow-delay="0.2s">Our <span>Gallery</span></h2>
+                            <p class="wow fadeInLeftBig" data-wow-duration="1.3s" data-wow-delay="0.5s">Browse through our collection of memorable moments.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+{% block content %}
+<section class="gallery_area pt-120 pb-130">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-30">
+                <a href="?{% if current_category %}category={% endif %}" class="main-btn {% if not current_category %}active{% endif %}" style="margin:5px;">All</a>
+                {% for cat in categories %}
+                <a href="?category={{ cat }}" class="main-btn {% if current_category == cat %}active{% endif %}" style="margin:5px;">{{ cat|title }}</a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row">
+            {% for item in gallery_items %}
+            <div class="col-lg-4 col-sm-6">
+                <div class="single_service mt-30 text-center wow fadeInUpBig" data-wow-duration="1.3s" data-wow-delay="0.{{ forloop.counter }}s">
+                    <div class="services_icon">
+                        <img src="{{ item.image.url }}" alt="{{ item.caption }}" style="width:100%;height:250px;object-fit:cover;border-radius:8px;">
+                    </div>
+                    <div class="services_content">
+                        <p>{{ item.caption }}</p>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center"><p>No images found.</p></div>
+            {% endfor %}
+        </div>
+        {% if gallery_items.has_other_pages %}
+        <div class="row mt-30">
+            <div class="col-12 text-center">
+                {% if gallery_items.has_previous %}
+                <a href="?page={{ gallery_items.previous_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}" class="main-btn">Previous</a>
+                {% endif %}
+                <span>Page {{ gallery_items.number }} of {{ gallery_items.paginator.num_pages }}</span>
+                {% if gallery_items.has_next %}
+                <a href="?page={{ gallery_items.next_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}" class="main-btn">Next</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

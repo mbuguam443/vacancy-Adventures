@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Search Results - Vacay Adventure{% endblock %}
+{% block content %}
+<section class="pt-130 pb-130">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="section_title text-center pb-25">
+                    <h3 class="title">Search <span>Tours</span></h3>
+                </div>
+                <form action="{% url 'search' %}" method="GET" class="mb-30">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="single_form">
+                                <input type="text" name="q" placeholder="Search..." value="{{ query }}">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="single_form">
+                                <select name="destination">
+                                    <option value="">All Destinations</option>
+                                    {% for dest in destinations %}
+                                    <option value="{{ dest.slug }}" {% if selected_destination == dest.slug %}selected{% endif %}>{{ dest.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="single_form">
+                                <select name="duration">
+                                    <option value="">Any Duration</option>
+                                    <option value="1-3" {% if selected_duration == '1-3' %}selected{% endif %}>1-3 Days</option>
+                                    <option value="4-7" {% if selected_duration == '4-7' %}selected{% endif %}>4-7 Days</option>
+                                    <option value="8-14" {% if selected_duration == '8-14' %}selected{% endif %}>8-14 Days</option>
+                                    <option value="15+" {% if selected_duration == '15+' %}selected{% endif %}>15+ Days</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="single_form">
+                                <button type="submit" class="main-btn">Search</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% if query or selected_destination or selected_duration %}
+        <div class="row">
+            <div class="col-12">
+                <h4 class="mb-30">Search Results ({{ tours|length }} tours found)</h4>
+            </div>
+        </div>
+        <div class="row">
+            {% for tour in tours %}
+            <div class="col-lg-4 col-sm-6">
+                <div class="single_service mt-30 text-center">
+                    <div class="services_content">
+                        <h4 class="title">{{ tour.title }}</h4>
+                        <p>{{ tour.duration_days }} Days - {{ tour.destination.name|default:'Various' }}</p>
+                        <p><strong>KSh {{ tour.discount_price|default:tour.price }}</strong></p>
+                        <a href="{% url 'tour_detail' tour.slug %}" class="main-btn">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center"><p>No tours match your search criteria.</p></div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
