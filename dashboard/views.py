@@ -436,10 +436,11 @@ class BookingList(AdminListView):
     columns = [
         Column('User', 'user'),
         Column('Tour', 'tour'),
+        Column('Travel Date', 'travel_date', 'dashboard/admin/cell_date.html'),
         Column('Guests', 'adults', 'dashboard/admin/cell_guests.html'),
         Column('Total', 'total_price', 'dashboard/admin/cell_price.html'),
         Column('Status', 'status', 'dashboard/admin/cell_status.html'),
-        Column('Date', 'booking_date', 'dashboard/admin/cell_date.html'),
+        Column('Booked', 'booking_date', 'dashboard/admin/cell_datetime.html'),
     ]
 
 

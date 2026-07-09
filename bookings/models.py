@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
-from tours.models import TourPackage
+from tours.models import TourPackage, TourDate
 
 class Booking(models.Model):
     STATUS_CHOICES = [
@@ -13,6 +13,7 @@ class Booking(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bookings')
     tour = models.ForeignKey(TourPackage, on_delete=models.CASCADE, related_name='bookings')
+    tour_date = models.ForeignKey(TourDate, on_delete=models.SET_NULL, null=True, blank=True, related_name='bookings')
     travel_date = models.DateField(blank=True, null=True)
     adults = models.IntegerField(default=1)
     children = models.IntegerField(default=0)

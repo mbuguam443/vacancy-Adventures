@@ -3,8 +3,7 @@
 @media (max-width: 991px) {
     .navbar-toggler { padding: 6px 10px !important; border: 1px solid #ddd; border-radius: 4px; }
     .navbar-nav .nav-item a { padding: 10px 0 !important; font-size: 15px; }
-    .navbar-nav .nav-item:last-child { margin-top: 8px; }
-    .navbar-nav .nav-item:last-child a { border: none !important; padding: 10px 0 !important; display: block !important; text-align: left !important; }
+    .navbar-nav .nav-item a[href*="login"] { border: none !important; padding: 10px 0 !important; display: block !important; text-align: left !important; margin-top: 8px; }
 }
 </style>
 <section class="header_area">
@@ -43,12 +42,32 @@
                                     <a class="page-scroll" href="/contact/">Contact</a>
                                 </li>
                                 {% if user.is_authenticated %}
+                                <!-- Mobile-only user nav -->
+                                <li class="nav-item d-lg-none"><hr style="margin:4px 0;border-color:#eee"></li>
+                                <li class="nav-item d-lg-none {% if '/dashboard/' in request.path and '/admin/' not in request.path %}active{% endif %}">
+                                    <a class="page-scroll" href="{% url 'dashboard:customer_dashboard' %}"><i class="lni lni-dashboard" style="margin-right:6px"></i>Dashboard</a>
+                                </li>
+                                <li class="nav-item d-lg-none {% if '/profile' in request.path %}active{% endif %}">
+                                    <a class="page-scroll" href="{% url 'accounts:profile' %}"><i class="lni lni-user" style="margin-right:6px"></i>Profile</a>
+                                </li>
+                                <li class="nav-item d-lg-none {% if '/bookings' in request.path %}active{% endif %}">
+                                    <a class="page-scroll" href="{% url 'bookings:user_bookings' %}"><i class="lni lni-calendar" style="margin-right:6px"></i>My Bookings</a>
+                                </li>
                                 {% if user.is_staff %}
-                                <li class="nav-item {% if '/dashboard/admin' in request.path %}active{% endif %}">
+                                <li class="nav-item d-lg-none">
+                                    <a class="page-scroll" href="{% url 'dashboard:admin_dashboard' %}"><i class="lni lni-shield" style="margin-right:6px"></i>Admin Panel</a>
+                                </li>
+                                {% endif %}
+                                <li class="nav-item d-lg-none">
+                                    <a class="page-scroll" href="{% url 'accounts:logout' %}"><i class="lni lni-exit" style="margin-right:6px"></i>Logout</a>
+                                </li>
+                                <!-- Desktop dropdown (hidden on mobile) -->
+                                {% if user.is_staff %}
+                                <li class="nav-item d-none d-lg-block {% if '/dashboard/admin' in request.path %}active{% endif %}">
                                     <a class="page-scroll" href="{% url 'dashboard:admin_dashboard' %}">Admin</a>
                                 </li>
                                 {% endif %}
-                                <li class="nav-item dropdown">
+                                <li class="nav-item dropdown d-none d-lg-block">
                                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="lni lni-user"></i> {{ user.username }}
                                     </a>

@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.db.models import Q
+from django.db.models import Q, OuterRef, Subquery, DateField
 from django.utils import timezone
 from .models import Destination, TourPackage, TourImage, TourDate
 
@@ -17,7 +17,14 @@ def destination_detail(request, slug):
     })
 
 def tour_list(request):
-    tours_list = TourPackage.objects.filter(status='published').order_by('-created_at')
+    today = timezone.now().date()
+    next_date_sub = TourDate.objects.filter(
+        tour=OuterRef('pk'), is_active=True, date__gte=today
+    ).order_by('date').values('date')[:1]
+
+    tours_list = TourPackage.objects.filter(status='published').annotate(
+        next_tour_date=Subquery(next_date_sub, output_field=DateField())
+    ).order_by('-created_at')
 
     category = request.GET.get('category', '')
     destination_slug = request.GET.get('destination', '')
@@ -58,23 +65,31 @@ def tour_list(request):
         'current_difficulty': difficulty,
         'current_sort': sort,
         'query': query,
+        'today': today,
     }
     return render(request, 'tours/tour_list.html', context)
 
 def tour_detail(request, slug):
+    today = timezone.now().date()
     tour = get_object_or_404(TourPackage, slug=slug, status='published')
     tour_images = tour.images.all()
     main_image = tour.image if tour.image else (tour_images.filter(is_main=True).first() or tour_images.first())
     reviews = tour.reviews.filter(is_active=True)
+    next_date_sub = TourDate.objects.filter(
+        tour=OuterRef('pk'), is_active=True, date__gte=today
+    ).order_by('date').values('date')[:1]
     similar_tours = TourPackage.objects.filter(
         category=tour.category, status='published'
-    ).exclude(id=tour.id)[:3]
+    ).exclude(id=tour.id).annotate(
+        next_tour_date=Subquery(next_date_sub, output_field=DateField())
+    )[:3]
     
     included = [s.strip() for s in tour.included_services.split('\n') if s.strip()] if tour.included_services else []
     excluded = [s.strip() for s in tour.excluded_services.split('\n') if s.strip()] if tour.excluded_services else []
     itinerary = [s.strip() for s in tour.itinerary.split('\n') if s.strip()] if tour.itinerary else []
 
-    tour_dates = tour.tour_dates.filter(is_active=True, available_seats__gt=0, date__gte=timezone.now().date())
+    upcoming_dates = tour.tour_dates.filter(is_active=True, available_seats__gt=0, date__gte=today).order_by('date')
+    past_dates = tour.tour_dates.filter(is_active=True, date__lt=today).order_by('-date')
 
     context = {
         'tour': tour,
@@ -85,8 +100,10 @@ def tour_detail(request, slug):
         'included': included,
         'excluded': excluded,
         'itinerary': itinerary,
-        'tour_dates': tour_dates,
+        'upcoming_dates': upcoming_dates,
+        'past_dates': past_dates,
         'avg_rating': tour.average_rating(),
         'review_count': tour.review_count(),
+        'today': today,
     }
     return render(request, 'tours/tour_detail.html', context)

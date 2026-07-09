@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
-from tours.models import TourPackage
+from tours.models import TourPackage, TourDate
 from .models import Booking, Review
 from payments.models import Payment
 import uuid
@@ -11,6 +11,7 @@ import uuid
 def book_tour(request, slug):
     tour = get_object_or_404(TourPackage, slug=slug, status='published')
     if request.method == 'POST':
+        tour_date_id = request.POST.get('tour_date_id')
         adults = int(request.POST.get('adults', 1))
         children = int(request.POST.get('children', 0))
         special_requests = request.POST.get('special_requests', '')
@@ -20,16 +21,26 @@ def book_tour(request, slug):
             messages.error(request, 'At least 1 guest is required.')
             return redirect('tour_detail', slug=slug)
 
-        if total_guests > tour.available_seats:
-            messages.error(request, f'Sorry, only {tour.available_seats} seats available.')
-            return redirect('tour_detail', slug=slug)
+        tour_date = None
+        if tour_date_id:
+            tour_date = get_object_or_404(TourDate, id=tour_date_id, tour=tour, is_active=True)
+            if tour_date.date < timezone.now().date():
+                messages.error(request, 'Selected date has already passed.')
+                return redirect('tour_detail', slug=slug)
+            if total_guests > tour_date.available_seats:
+                messages.error(request, f'Sorry, only {tour_date.available_seats} seats available on {tour_date.date.strftime("%d %b %Y")}.')
+                return redirect('tour_detail', slug=slug)
 
         price_per_person = tour.discount_price if tour.discount_price else tour.price
+        if tour_date and tour_date.price_adjustment:
+            price_per_person += tour_date.price_adjustment
         total_price = price_per_person * total_guests
 
         booking = Booking.objects.create(
             user=request.user,
             tour=tour,
+            tour_date=tour_date,
+            travel_date=tour_date.date if tour_date else None,
             adults=adults,
             children=children,
             special_requests=special_requests,
@@ -44,7 +55,7 @@ def book_tour(request, slug):
             status='pending',
         )
 
-        messages.success(request, 'Booking created! Admin will assign your travel date. Please complete payment.')
+        messages.success(request, 'Booking created! Please complete payment.')
         return redirect('payments:mpesa_payment', booking_id=booking.id)
 
     return redirect('tour_detail', slug=slug)
@@ -63,6 +74,9 @@ def booking_detail(request, booking_id):
 def cancel_booking(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id, user=request.user)
     if booking.status == 'approved':
+        if booking.tour_date:
+            booking.tour_date.available_seats += booking.total_guests()
+            booking.tour_date.save()
         tour = booking.tour
         tour.available_seats += booking.total_guests()
         tour.save()

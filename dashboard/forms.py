@@ -101,14 +101,24 @@ class TourDateForm(forms.ModelForm):
 class BookingForm(forms.ModelForm):
     class Meta:
         model = Booking
-        fields = ['status', 'travel_date', 'adults', 'children', 'special_requests']
+        fields = ['status', 'tour_date', 'travel_date', 'adults', 'children', 'special_requests']
         widgets = {
             'status': forms.Select(attrs={'class': 'form-select'}),
+            'tour_date': forms.Select(attrs={'class': 'form-select'}),
             'travel_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'adults': forms.NumberInput(attrs={'class': 'form-control'}),
             'children': forms.NumberInput(attrs={'class': 'form-control'}),
             'special_requests': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.tour_id:
+            self.fields['tour_date'].queryset = TourDate.objects.filter(
+                tour_id=self.instance.tour_id
+            ).order_by('-date')
+        else:
+            self.fields['tour_date'].queryset = TourDate.objects.all().order_by('-date')
 
 
 class ReviewForm(forms.ModelForm):

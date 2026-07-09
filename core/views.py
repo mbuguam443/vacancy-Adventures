@@ -1,15 +1,22 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.db.models import Q
+from django.db.models import Q, OuterRef, Subquery, DateField
 from django.urls import reverse
-from tours.models import TourPackage, Destination
+from django.utils import timezone
+from tours.models import TourPackage, Destination, TourDate
 from blog.models import BlogPost
 from .models import Service, WhyChooseUs, Testimonial, Gallery, FAQ, ContactMessage, NewsletterSubscriber
 
 
 def home_view(request):
-    featured_tours = TourPackage.objects.filter(status='published', is_featured=True)[:6]
+    today = timezone.now().date()
+    next_date_sub = TourDate.objects.filter(
+        tour=OuterRef('pk'), is_active=True, date__gte=today
+    ).order_by('date').values('date')[:1]
+    featured_tours = TourPackage.objects.filter(status='published', is_featured=True).annotate(
+        next_tour_date=Subquery(next_date_sub, output_field=DateField())
+    )[:6]
     services = Service.objects.all()[:4]
     why_choose_us = WhyChooseUs.objects.all()[:4]
     testimonials = Testimonial.objects.filter(is_active=True)[:10]
