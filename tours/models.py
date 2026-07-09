@@ -96,6 +96,7 @@ class TourPackage(models.Model):
     guide = models.ForeignKey(TourGuide, on_delete=models.SET_NULL, null=True, blank=True, related_name='tours')
     included_services = models.TextField(blank=True, help_text='List items separated by newline')
     excluded_services = models.TextField(blank=True, help_text='List items separated by newline')
+    image = models.ImageField(upload_to='tours/', blank=True, null=True, help_text='Main tour image (shown in listings). Individual gallery images below.')
     meeting_point = models.CharField(max_length=500, blank=True)
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)

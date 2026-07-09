@@ -1,4 +1,12 @@
 {% load static %}
+<style>
+@media (max-width: 991px) {
+    .navbar-toggler { padding: 6px 10px !important; border: 1px solid #ddd; border-radius: 4px; }
+    .navbar-nav .nav-item a { padding: 10px 0 !important; font-size: 15px; }
+    .navbar-nav .nav-item:last-child { margin-top: 8px; }
+    .navbar-nav .nav-item:last-child a { border: none !important; padding: 10px 0 !important; display: block !important; text-align: left !important; }
+}
+</style>
 <section class="header_area">
     <div class="header_navbar">
         <div class="container">
@@ -35,6 +43,11 @@
                                     <a class="page-scroll" href="/contact/">Contact</a>
                                 </li>
                                 {% if user.is_authenticated %}
+                                {% if user.is_staff %}
+                                <li class="nav-item {% if '/dashboard/admin' in request.path %}active{% endif %}">
+                                    <a class="page-scroll" href="{% url 'dashboard:admin_dashboard' %}">Admin</a>
+                                </li>
+                                {% endif %}
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="lni lni-user"></i> {{ user.username }}

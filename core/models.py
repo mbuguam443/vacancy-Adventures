@@ -20,6 +20,7 @@ class SiteSetting(models.Model):
     corporate_clients = models.IntegerField(default=0)
     visited_countries = models.IntegerField(default=0)
     team_members = models.IntegerField(default=0)
+    hero_video_url = models.URLField(blank=True, help_text='Direct MP4 URL for the hero background video. Leave blank for default safari video.')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

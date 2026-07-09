@@ -37,7 +37,7 @@ $(function() {
     
     //===== close navbar-collapse when a  clicked
 
-    $(".navbar-nav a").on('click', function () {
+    $(".navbar-nav a:not(.dropdown-toggle)").on('click', function () {
         $(".navbar-collapse").removeClass("show");
     });
 
@@ -45,7 +45,7 @@ $(function() {
         $(this).toggleClass("active");
     });
 
-    $(".navbar-nav a").on('click', function () {
+    $(".navbar-nav a:not(.dropdown-toggle)").on('click', function () {
         $(".navbar-toggler").removeClass('active');
     });
     

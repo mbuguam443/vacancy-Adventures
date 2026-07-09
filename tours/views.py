@@ -63,7 +63,7 @@ def tour_list(request):
 def tour_detail(request, slug):
     tour = get_object_or_404(TourPackage, slug=slug, status='published')
     tour_images = tour.images.all()
-    main_image = tour_images.filter(is_main=True).first() or tour_images.first()
+    main_image = tour.image if tour.image else (tour_images.filter(is_main=True).first() or tour_images.first())
     reviews = tour.reviews.filter(is_active=True)
     similar_tours = TourPackage.objects.filter(
         category=tour.category, status='published'
