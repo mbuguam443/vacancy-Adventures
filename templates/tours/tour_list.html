@@ -80,18 +80,6 @@
     font-weight: 600;
     z-index: 2;
 }
-.tour-grid-card .card-discount {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    background: #dc3545;
-    color: #fff;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 700;
-    z-index: 2;
-}
 .tour-grid-card .card-body {
     padding: 18px 20px 20px;
     flex: 1;
@@ -314,9 +302,6 @@
                                 <img src="{{ tour.images.first.image.url }}" alt="{{ tour.title }}">
                                 {% else %}
                                 <img src="{% static 'images/hero-area.jpg' %}" alt="{{ tour.title }}">
-                                {% endif %}
-                                {% if tour.discount_price %}
-                                <div class="card-discount">Sale</div>
                                 {% endif %}
                                 {% if tour.available_seats <= 0 %}
                                 <div class="card-badge" style="background:#dc3545;">Sold Out</div>
