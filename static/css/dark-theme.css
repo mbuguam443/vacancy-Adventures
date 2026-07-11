@@ -164,6 +164,12 @@
 .dark-theme .filter_sidebar .single_form select:focus,
 .dark-theme .filter_sidebar .single_form input:focus { border-color: #ca8a04 !important; background: #0f172a !important; }
 
+/* ─── TOUR DETAIL TABS ─── */
+.dark-theme .tour-tabs .nav-tabs { background: #1e293b !important; border-bottom-color: #334155 !important; }
+.dark-theme .tour-tabs .nav-tabs .nav-link { color: #94a3b8 !important; }
+.dark-theme .tour-tabs .nav-tabs .nav-link:hover { color: #ca8a04 !important; }
+.dark-theme .tour-tabs .nav-tabs .nav-link.active { color: #ca8a04 !important; border-bottom-color: #ca8a04 !important; }
+
 /* ─── TOUR CARD MISC ─── */
 .dark-theme .tour-grid-card .card-price { border-top-color: #475569 !important; }
 
