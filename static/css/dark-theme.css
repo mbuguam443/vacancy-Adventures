@@ -59,6 +59,7 @@
 }
 
 .dark-theme .card-body, .dark-theme .card-header { background: transparent !important; color: #f1f5f9 !important; }
+.dark-theme .card-header small { color: rgba(255,255,255,0.9) !important; }
 
 /* ─── META / MUTED TEXT ─── */
 .dark-theme .blog-meta, .dark-theme .blog_meta ul li, .dark-theme .blog_meta ul li a,
